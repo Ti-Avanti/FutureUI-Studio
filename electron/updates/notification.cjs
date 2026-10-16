@@ -1,3 +1,4 @@
+const { tr } = require('../i18n.cjs');
 const { Notification } = require('electron');
 const path = require('node:path');
 
@@ -11,8 +12,8 @@ function updateNotifications(app, window) {
       try {
         notification?.close();
         notification = new Notification({
-          title: 'FutureUI Studio 有新版本',
-          body: `版本 ${version} 已发布，点击查看更新内容。由你决定何时下载和安装。`,
+          title: tr("FutureUI Studio 有新版本"),
+          body: tr("版本 {0} 已发布，点击查看更新内容。由你决定何时下载和安装。", version),
           icon: path.join(app.getAppPath(), 'resources/branding/icon.png'),
         });
         notification.on('click', () => {

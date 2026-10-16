@@ -1,3 +1,4 @@
+import { tr } from '../i18n';
 import type { Box, Config, Element, Issue } from '../model/types';
 
 const integer = (value: unknown, fallback: number) => Number.isFinite(Number(value)) && value !== undefined ? Math.floor(Number(value)) : fallback;
@@ -22,7 +23,7 @@ export function layout(elements: Element[], settings: Config, issues: Issue[]) {
     const cell = Math.floor((inner - gap * (columns - 1)) / columns);
     const fixed = nodes.filter(n => n.width !== undefined).reduce((sum, n) => sum + integer(n.width, 0), 0), auto = nodes.filter(n => n.width === undefined).length;
     const remaining = inner - gap * Math.max(0, nodes.length - 1) - fixed;
-    if (mode === 'row' && remaining < 0 && nodes[0]) report(nodes[0], '横向容器内容超出可用宽度');
+    if (mode === 'row' && remaining < 0 && nodes[0]) report(nodes[0], tr("横向容器内容超出可用宽度"));
     let rowHeight = 0, rowY = y + padding, cursor = x + padding;
     nodes.forEach((node, i) => {
       if (i % columns === 0 && i > 0) { rowY += rowHeight + gap; rowHeight = 0; cursor = x + padding; }
@@ -34,9 +35,9 @@ export function layout(elements: Element[], settings: Config, issues: Issue[]) {
       const childBoxes: Box[] = [];
       const intrinsic = node.type === 'viewport' ? integer(node.height, 99) : node.children ? place(node.children, node.type === 'canvas' ? { ...node.layout, type: node.layout?.type ?? 'column' } : node, bx, rowY, w, childBoxes, depth + 1) : naturalHeight(node);
       const h = Math.max(integer(node['min-height'], 0), integer(node.height, intrinsic));
-      if (h < intrinsic && node.children && node.type !== 'viewport') report(node, `${node.id} 的高度 ${h} 小于内容高度 ${intrinsic}`);
+      if (h < intrinsic && node.children && node.type !== 'viewport') report(node, tr("{0} 的高度 {1} 小于内容高度 {2}", node.id, h, intrinsic));
       if (h > intrinsic) shift(childBoxes, h - intrinsic, node['vertical-align'] ?? 'start');
-      for (const key of ['height', 'padding', 'gap', 'min-height']) if (node[key] !== undefined && Number.isFinite(Number(node[key])) && Number(node[key]) % 9 !== 0) report(node, `${node.id}.${key} 应为 9 的倍数`);
+      for (const key of ['height', 'padding', 'gap', 'min-height']) if (node[key] !== undefined && Number.isFinite(Number(node[key])) && Number(node[key]) % 9 !== 0) report(node, tr("{0}.{1} 应为 9 的倍数", node.id, key));
       const box = { key: node._key, x: bx, y: rowY, width: w, height: Math.max(0, h), node, depth };
       output.push(box, ...childBoxes);
       if (node.type === 'viewport' && node.children) {

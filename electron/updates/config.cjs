@@ -1,3 +1,4 @@
+const { tr } = require('../i18n.cjs');
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const { randomUUID } = require('node:crypto');
@@ -5,11 +6,11 @@ const { randomUUID } = require('node:crypto');
 async function loadConfiguration(app) {
   const value = JSON.parse(await fs.readFile(path.join(app.getAppPath(), 'resources/updates.json'), 'utf8'));
   if (value.provider !== 'github' || !/^[a-z0-9-]+$/i.test(value.owner ?? '') || !/^[a-z0-9_.-]+$/i.test(value.repo ?? '')) {
-    throw Error('更新源配置无效，请检查 resources/updates.json');
+    throw Error(tr("更新源配置无效，请检查 resources/updates.json"));
   }
   const interval = Number(value.checkIntervalMinutes);
   if (!Number.isInteger(interval) || interval < 15 || interval > 10080 || typeof value.checkOnStartup !== 'boolean') {
-    throw Error('更新检查间隔须为 15–10080 分钟，启动检查须为布尔值');
+    throw Error(tr("更新检查间隔须为 15–10080 分钟，启动检查须为布尔值"));
   }
   return {
     feed: { provider: 'github', owner: value.owner, repo: value.repo, private: false },
@@ -28,7 +29,7 @@ function preferenceStore(app) {
       return typeof value?.autoCheck === 'boolean' ? value.autoCheck : fallback;
     },
     save(autoCheck) {
-      if (typeof autoCheck !== 'boolean') throw Error('无效的更新检查选项');
+      if (typeof autoCheck !== 'boolean') throw Error(tr("无效的更新检查选项"));
       const operation = pending.catch(() => {}).then(async () => {
         const temporary = `${file}.${randomUUID()}.tmp`;
         await fs.writeFile(temporary, JSON.stringify({ autoCheck }), { encoding: 'utf8', mode: 0o600 });

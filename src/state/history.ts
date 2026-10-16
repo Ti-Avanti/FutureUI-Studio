@@ -1,3 +1,4 @@
+import { tr } from '../i18n';
 import type { Change, FileEdit, ProjectFile } from '../model/types';
 
 export function applyFileEdits(files: ProjectFile[], edits: FileEdit[], direction: 'before' | 'after', hashes: Record<string, string | null>): ProjectFile[] {
@@ -19,7 +20,7 @@ export function difference(current: { path: string; text: string }[], target: { 
 }
 
 export function timelineFiles(files: ProjectFile[], past: Change[], future: Change[], index: number, hashes: Record<string, string | null>): ProjectFile[] {
-  if (!Number.isInteger(index) || index < 0 || index > past.length + future.length) throw Error('操作节点已改变，请重新选择');
+  if (!Number.isInteger(index) || index < 0 || index > past.length + future.length) throw Error(tr("操作节点已改变，请重新选择"));
   let result = files;
   if (index < past.length) for (const node of past.slice(index).reverse()) result = applyFileEdits(result, node.files, 'before', hashes);
   else for (const node of [...future].reverse().slice(0, index - past.length)) result = applyFileEdits(result, node.files, 'after', hashes);

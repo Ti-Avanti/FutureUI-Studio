@@ -274,8 +274,8 @@
       {
         "kind": "p",
         "text": [
-          "底部语言切换只改变**菜单预览语言**，不会把 Studio 的操作界面翻译成英文。PAPI 和第三方插件变量在离线预览中不等于实时解析；需要提供预览值或进入游戏确认。",
-          "The bottom language selector changes the **menu preview language**, not Studio's interface language. Offline previews do not query live PAPI or third-party plugins; provide representative values or verify in game."
+          "底部切换的是菜单预览语言；编辑器界面语言由顶部语言图标单独控制。PAPI 和第三方变量在离线预览中不等于实时解析；提供预览值或进入游戏确认。",
+          "The status-bar selector changes the menu preview language; the top language icon independently controls the editor interface. Offline previews do not query live PAPI or integrations. Provide representative values or verify in game."
         ]
       }
     ]

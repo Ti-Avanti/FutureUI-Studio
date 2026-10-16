@@ -1,3 +1,4 @@
+import { tr } from '../i18n';
 import catalog from '../../resources/capabilities.json';
 import { documentId, readYaml } from './documents';
 import type { Config, Issue, Project } from './types';
@@ -11,12 +12,12 @@ export function validateProject(project: Project): Issue[] {
     if (parsed.error) { issues.push({ level: 'error', file: file.path, message: parsed.error }); continue; }
     if (!/^(menus|templates)\//.test(file.path)) continue;
     const root = parsed.value, id = file.path.startsWith('templates/') ? file.path.replace(/^templates\//, '').replace(/\.ya?ml$/, '') : documentId(file), key = `${file.path.split('/')[0]}:${id}`;
-    if (ids.has(key)) issues.push({ level: 'error', file: file.path, message: `重复 ID ${id}，也在 ${ids.get(key)}` }); ids.set(key, file.path);
+    if (ids.has(key)) issues.push({ level: 'error', file: file.path, message: tr("重复 ID {0}，也在 {1}", id, ids.get(key)) }); ids.set(key, file.path);
     const seen = new Set<string>();
     function walk(node: Config, path: (string | number)[], depth: number) {
       if (!node || typeof node !== 'object' || depth > 24) return;
-      if (node.template && !templates.has(node.template)) issues.push({ level: 'error', file: file.path, path, message: `模板不存在：${node.template}` });
-      if (node.type === 'open-menu' && typeof node.menu === 'string' && !node.menu.includes('{') && !menus.has(node.menu)) issues.push({ level: 'error', file: file.path, path, message: `目标菜单不存在：${node.menu}` });
+      if (node.template && !templates.has(node.template)) issues.push({ level: 'error', file: file.path, path, message: tr("模板不存在：{0}", node.template) });
+      if (node.type === 'open-menu' && typeof node.menu === 'string' && !node.menu.includes('{') && !menus.has(node.menu)) issues.push({ level: 'error', file: file.path, path, message: tr("目标菜单不存在：{0}", node.menu) });
       for (const [k, v] of Object.entries(node)) if (Array.isArray(v)) v.forEach((entry, i) => walk(entry, [...path, k, i], depth + 1)); else if (v && typeof v === 'object') walk(v, [...path, k], depth + 1);
     }
     function components(nodes: Config[], path: (string | number)[], depth = 0) {
@@ -25,7 +26,7 @@ export function validateProject(project: Project): Issue[] {
         if (!node || typeof node !== 'object') return;
         const current = [...path, i];
         if (typeof node.id === 'string') {
-          if (seen.has(node.id)) issues.push({ level: 'error', file: file.path, path: current, message: `重复组件 ID：${node.id}` });
+          if (seen.has(node.id)) issues.push({ level: 'error', file: file.path, path: current, message: tr("重复组件 ID：{0}", node.id) });
           seen.add(node.id);
         }
         for (const key of ['children', 'after-items']) if (Array.isArray(node[key])) components(node[key], [...current, key], depth + 1);

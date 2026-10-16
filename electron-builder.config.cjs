@@ -31,5 +31,8 @@ module.exports = {
   },
   portable: { artifactName: 'FutureUI-Studio-${version}-Portable.${ext}' },
   publish: { provider: 'github', owner: updates.owner, repo: updates.repo, releaseType: 'release' },
-  releaseInfo: { releaseName: notes.title, releaseNotes: notes.changes.map(change => `- ${change}`).join('\n') },
+  releaseInfo: {
+    releaseName: notes.title,
+    releaseNotes: `## 简体中文\n${notes.changes.map(change => `- ${change}`).join('\n')}\n\n## English\n${(notes.changesEn ?? notes.changes).map(change => `- ${change}`).join('\n')}`,
+  },
 };

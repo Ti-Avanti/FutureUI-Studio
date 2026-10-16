@@ -3,6 +3,11 @@ const invoke = (channel, ...args) => ipcRenderer.invoke(channel, ...args).then(r
   if (!result.ok) throw Error(result.error); return result.value;
 });
 contextBridge.exposeInMainWorld('studio', {
+  language: {
+    state: () => invoke('language:state'),
+    set: preference => invoke('language:set', preference),
+    onState: handler => { const listener = (_event, value) => handler(value); ipcRenderer.on('language:state', listener); return () => ipcRenderer.removeListener('language:state', listener); },
+  },
   bootstrap: () => invoke('project:bootstrap'),
   open: () => invoke('project:open'),
   create: () => invoke('project:create'),

@@ -58,7 +58,7 @@ export function condition(node: any, resolve: (input: unknown) => any, vars: Con
     default: return vars[`condition.${type}`] === true;
   }
 }
-export function shopRows(source: Config, docs: ReturnType<typeof indexProject>['docs'], variables: Config, language: Record<string, unknown>): Config[] | null {
+export function shopRows(source: Config, docs: ReturnType<typeof indexProject>['docs'], variables: Config, language: Record<string, unknown>, locale: string): Config[] | null {
   const shopId = String(source.shop ?? 'system'), shop = [...docs.values()].find(v => v.file.path.startsWith('shops/') && (v.data.id ?? v.file.path.slice(6, -4)) === shopId)?.data;
   if (!shop) return null;
   const selected = variables.category, active = Array.isArray(selected) ? selected.map(String) : selected ? [String(selected)] : [];
@@ -69,6 +69,6 @@ export function shopRows(source: Config, docs: ReturnType<typeof indexProject>['
     const quantity = Number(variables[`quantity.${shopId}.${p.id}`] ?? p.quantity?.initial ?? 1);
     return { ...p, shop: shopId, name: resolve(p.name), icon: p.item?.icon ?? String(p.item?.material ?? 'paper').toLowerCase(), amount: p.amount ?? 1,
       quantity, initial: p.quantity?.initial ?? 1, minimum: p.quantity?.min ?? 1, maximum: p.quantity?.max ?? 64, step: p.quantity?.step ?? 1, decrement: -(p.quantity?.step ?? 1),
-      'quantity-key': `quantity.${shopId}.${p.id}`, total: Number(p.price) * quantity, items: Number(p.amount ?? 1) * quantity, 'total-items':Number(p.amount??1)*quantity, currency: p.currency === 'vault' ? (language['currencies.vault'] ?? '金币') : p.currency, available: Number(variables.balance ?? 1280) >= Number(p.price) * quantity };
+      'quantity-key': `quantity.${shopId}.${p.id}`, total: Number(p.price) * quantity, items: Number(p.amount ?? 1) * quantity, 'total-items':Number(p.amount??1)*quantity, currency: p.currency === 'vault' ? (language['currencies.vault'] ?? (locale.startsWith('zh') ? '金币' : 'Coins')) : p.currency, available: Number(variables.balance ?? 1280) >= Number(p.price) * quantity };
   });
 }

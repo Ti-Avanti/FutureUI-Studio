@@ -1,7 +1,9 @@
+import { tr, useInterfaceLanguage } from '../../i18n';
 import { useEffect, useRef, type ReactNode } from 'react';
 import { X } from 'lucide-react';
 
 export function WorkbenchDialog({ title, subtitle, close, busy = false, children }: { title: string; subtitle: string; close(): void; busy?: boolean; children: ReactNode }) {
+  useInterfaceLanguage();
   const panel = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const previous = document.activeElement as HTMLElement | null;
@@ -19,7 +21,7 @@ export function WorkbenchDialog({ title, subtitle, close, busy = false, children
     return () => { document.removeEventListener('keydown', keyboard, true); if (previous?.isConnected) previous.focus(); };
   }, [busy, close]);
   return <div className="workbench-shade"><div className="workbench-dialog" role="dialog" aria-modal="true" aria-label={title} ref={panel} tabIndex={-1}>
-    <header className="workbench-dialog-header"><div><h2>{title}</h2><p>{subtitle}</p></div><button className="icon-button" aria-label={`关闭${title}`} disabled={busy} onClick={close}><X size={19}/></button></header>
+    <header className="workbench-dialog-header"><div><h2>{title}</h2><p>{subtitle}</p></div><button className="icon-button" aria-label={tr("关闭{0}", title)} disabled={busy} onClick={close}><X size={19}/></button></header>
     {children}
   </div></div>;
 }

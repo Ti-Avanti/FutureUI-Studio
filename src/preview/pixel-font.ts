@@ -1,6 +1,6 @@
 import bitmapGlyphs from './font-data/bitmap.json';
+import { drawMinifiedGlyph, type PixelGlyph as Glyph } from './glyph-raster';
 
-interface Glyph { rows: number[]; width: number; scale: number; advance: number; top: number; left: number }
 const bitmap = bitmapGlyphs as Record<string, Glyph>;
 const unicode = new Map<number, string>(), glyphCache = new Map<string, Glyph>();
 let loading: Promise<void> | undefined;
@@ -41,6 +41,10 @@ export function drawGlyph(ctx: CanvasRenderingContext2D, char: string, x: number
   const glyph = glyphFor(char);
   if (!glyph) { ctx.font = `${bold ? 'bold ' : ''}9px "Microsoft YaHei", monospace`; ctx.textBaseline = 'top'; ctx.fillText(char, x, y); return; }
   const transform = ctx.getTransform();
+  if (glyph.scale * Math.min(Math.abs(transform.a), Math.abs(transform.d)) < 1) {
+    drawMinifiedGlyph(ctx, glyph, char, x, y, color, bold);
+    return;
+  }
   const snapX = (value: number) => Math.round(value * transform.a + transform.e) / transform.a - transform.e / transform.a;
   const snapY = (value: number) => Math.round(value * transform.d + transform.f) / transform.d - transform.f / transform.d;
   for (let row = 0; row < glyph.rows.length; row++) {

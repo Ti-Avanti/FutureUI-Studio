@@ -21,7 +21,7 @@ REPO = ROOT.parent.parent
 WIDTH, HEIGHT = A4
 MARGIN = 43
 CONTENT_WIDTH = WIDTH - 2 * MARGIN
-EDITION_DATE = '2026-10-16'
+EDITION_DATE = '2026-10-17'
 
 
 def header(pdf, version, section, page_number, total):

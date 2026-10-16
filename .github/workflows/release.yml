@@ -71,7 +71,7 @@ jobs:
           }
           $notesPath = Join-Path $env:RUNNER_TEMP 'futureui-studio-release.txt'
           $releaseUrl = "https://github.com/${env:GITHUB_REPOSITORY}/releases/download/$tag"
-          $body = @($notes.title, '') + @($notes.changes | ForEach-Object { "- $_" }) + @(
+          $body = @($notes.title, '') + @($notes.changes | ForEach-Object { "- $_" }) + @('', 'English', '') + @($notes.changesEn | ForEach-Object { "- $_" }) + @(
             '', '首次使用请安装 Setup 版本。便携版不支持应用内安装更新。',
             '', '使用手册 / User guides（各 32 页）：', '',
             "- [中文 PDF]($releaseUrl/FutureUI-Studio-Guide-zh-CN.pdf)",

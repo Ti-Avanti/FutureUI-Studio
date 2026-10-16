@@ -1,0 +1,14 @@
+.interface-language{position:relative;flex:none}
+.language-menu{position:absolute;right:0;top:38px;z-index:400;width:254px;padding:12px;background:#232930;border:1px solid #3c4650;border-radius:7px;box-shadow:0 12px 32px #0007;color:#d6dee5}
+.language-menu>strong{display:block;margin:0 7px 9px;font-size:12px}
+.language-menu>button{display:flex;align-items:center;justify-content:space-between;width:100%;padding:10px;border:0;border-radius:4px;background:transparent;color:inherit;text-align:left}
+.language-menu>button:hover,.language-menu>button:focus-visible{background:#36434a;outline:1px solid #73b9a8}
+.language-menu>button[aria-checked=true]{color:#83d9bf;background:#2b403b}
+.language-menu p,.language-menu small{display:block;margin:10px 7px 2px;color:#9aabb7;font-size:11px;line-height:1.65}
+html[lang=en] .dropdown-menu{width:290px}
+html[lang=en] .dropdown-menu button{gap:12px;text-align:left}
+html[lang=en] .dropdown-menu kbd{flex-shrink:0}
+html[lang=en] .segment-tabs button{padding-inline:7px;white-space:nowrap}
+.header-actions .save-count{flex:0 0 32px;width:32px;text-align:center}
+@media(max-width:1450px){html[lang=en] .workspace-title{display:none}}
+@media(max-width:1250px){html[lang=en] .workspace-title{display:none}html[lang=en] .workspace-bar nav button{padding:0 8px;font-size:11px}html[lang=en] .header-actions .secondary-button{padding-inline:8px}}

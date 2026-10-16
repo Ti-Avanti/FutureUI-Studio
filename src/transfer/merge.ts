@@ -1,3 +1,4 @@
+import { tr } from '../i18n';
 import { isSeq, parseDocument } from 'yaml';
 import type { ConflictChoice } from './types';
 
@@ -15,7 +16,7 @@ function document(text: string) {
   const doc = parseDocument(text, { uniqueKeys: true, keepSourceTokens: true });
   if (doc.errors.length) throw Error(doc.errors[0].message);
   const data = doc.toJS({ maxAliasCount: 100 });
-  if (!mapping(data)) throw Error('配置根节点必须是映射');
+  if (!mapping(data)) throw Error(tr("配置根节点必须是映射"));
   return { doc, data };
 }
 
@@ -42,7 +43,7 @@ export function mergeConfiguration(currentText: string, incomingText: string, pr
       for (const item of b) {
         const index = indices.get(item.id);
         if (index !== undefined) visit(a[index], item, [...path, index], [...labels, `[${item.id}]`]);
-        else { const sequence = doc.getIn(path, true); if (!isSeq(sequence)) throw Error('组件列表无法合并'); sequence.add(doc.createNode(item)); changed = true; }
+        else { const sequence = doc.getIn(path, true); if (!isSeq(sequence)) throw Error(tr("组件列表无法合并")); sequence.add(doc.createNode(item)); changed = true; }
       }
       return;
     }

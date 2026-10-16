@@ -1,3 +1,4 @@
+import { tr } from '../i18n';
 import type { Box, Config, Preview } from '../model/types';
 import { textSegments, plain } from './text';
 import { drawGlyph, glyphAdvance } from './pixel-font';
@@ -53,14 +54,14 @@ export function paint(ctx: CanvasRenderingContext2D, preview: Preview, hovered: 
     if (n.type === 'image' || n['background-image']) {
       const id = String(n.image ?? n['background-image']), url = preview.images[id] ?? preview.images[n['fallback-image']];
       if (url) { const image = bitmap(url, repaint); if (image.complete && image.naturalWidth) { const size = Math.min(Number(n.size ?? n['background-size'] ?? 72), box.height, box.width); const w = Math.min(size * image.width / image.height, box.width), h = w * image.height / image.width; ctx.drawImage(image, Math.round(box.x + (box.width - w) / 2), Math.round(box.y + (box.height - h) / 2), w, h); } }
-      else { ctx.strokeStyle = '#717b7d'; ctx.setLineDash([3, 3]); ctx.strokeRect(box.x + 4, box.y + 4, box.width - 8, box.height - 8); drawText(ctx, { ...box, node: { ...n, padding: 9, 'vertical-align': 'center', 'text-align': 'center' } }, id || '图片'); }
+      else { ctx.strokeStyle = '#717b7d'; ctx.setLineDash([3, 3]); ctx.strokeRect(box.x + 4, box.y + 4, box.width - 8, box.height - 8); drawText(ctx, { ...box, node: { ...n, padding: 9, 'vertical-align': 'center', 'text-align': 'center' } }, id || tr("图片")); }
     }
     if (['text', 'button', 'toggle'].includes(n.type)) drawText(ctx, box, n.text, disabled ? '#8d9392' : undefined);
     if (n.type === 'progress') { drawSkin(ctx, box, skinFor(preview.theme, n['track-skin'] ?? 'readout')); const width = Math.round(box.width * Math.min(1, Math.max(0, Number(n.value) || 0))); drawSkin(ctx, { ...box, width }, skinFor(preview.theme, n['fill-skin'] ?? 'selected')); }
-    if (n.type === 'raster') { drawText(ctx, { ...box, node: { ...n, padding: 9, 'text-align': 'center', 'vertical-align': 'center' } }, n['empty-text'] ?? '动态图片 · 需要提供器数据'); }
+    if (n.type === 'raster') { drawText(ctx, { ...box, node: { ...n, padding: 9, 'text-align': 'center', 'vertical-align': 'center' } }, n['empty-text'] ?? tr("动态图片 · 需要提供器数据")); }
     if (n.type === 'chart') {
       const values = (n.series ?? n.data ?? []).map((v: any) => ({ label: plain(v.label ?? v.name ?? ''), value: Number(v.value) || 0 }));
-      if (!values.length) drawText(ctx, { ...box, node: { ...n, padding: 9 } }, '图表 · 请绑定数据');
+      if (!values.length) drawText(ctx, { ...box, node: { ...n, padding: 9 } }, tr("图表 · 请绑定数据"));
       const max = Math.max(1, ...values.map((v: any) => v.value));
       values.forEach((v: any, i: number) => { const y = box.y + 9 + i * 36; drawText(ctx, { ...box, y, height: 18, node: { ...n, padding: 0 } }, `${v.label}  ${v.value}`); ctx.fillStyle = '#648e41'; ctx.fillRect(box.x, y + 18, box.width * v.value / max, 9); });
     }

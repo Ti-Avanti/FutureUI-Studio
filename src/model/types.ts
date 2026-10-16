@@ -13,6 +13,7 @@ export interface FileEdit { path: string; before: string | null; after: string |
 export interface FileWrite { path: string; text: string | null; hash: string | null }
 export interface Change { id: string; label: string; path: string; time: number; files: FileEdit[] }
 export interface StudioAPI {
+  language: import('../i18n/types').LanguageAPI;
   updates: import('../updates/types').UpdatesAPI;
   transfer: import('../transfer/types').TransferAPI;
   history: import('../history/types').HistoryAPI;

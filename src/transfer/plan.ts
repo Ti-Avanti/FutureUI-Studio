@@ -1,3 +1,4 @@
+import { tr } from '../i18n';
 import type { FileEdit, Project } from '../model/types';
 import { configPathError } from '../model/paths';
 import { mergeConfiguration, yamlError, type MergeConflict } from './merge';
@@ -16,7 +17,7 @@ export function planImport(project: Project, batch: ImportBatch, choices: Import
     const preview: ImportPreview = { choice, before, after: before, error: '', conflicts: [] };
     try {
       const casing = casingPaths.get(choice.path.toLowerCase());
-      const error = entry.error || configPathError(choice.path) || (casing && casing !== choice.path ? '与现有文件的大小写冲突，请使用原路径' : '') || ((paths.get(choice.path.toLowerCase()) ?? 0) > 1 && choice.selected ? '多个导入文件指向同一路径，请取消选择或更改路径' : '') || yamlError(entry.text);
+      const error = entry.error || configPathError(choice.path) || (casing && casing !== choice.path ? tr("与现有文件的大小写冲突，请使用原路径") : '') || ((paths.get(choice.path.toLowerCase()) ?? 0) > 1 && choice.selected ? tr("多个导入文件指向同一路径，请取消选择或更改路径") : '') || yamlError(entry.text);
       if (error) throw Error(error);
       if (before === null) preview.after = entry.text;
       else if (choice.strategy === 'replace') preview.after = entry.text;

@@ -1,3 +1,4 @@
+import { tr } from '../i18n';
 import { create } from 'zustand';
 import { dirtyFiles, useStudio } from '../state/store';
 import { useAgent } from '../agent/store';
@@ -55,14 +56,14 @@ export const useUpdates = create<UpdatesStore>((set, get) => {
       if (get().preparing) return;
       set({ preparing: true, error: '' });
       try {
-        if (useAgent.getState().sessions.some(session => session.running)) throw Error('Agent 仍在执行任务，请等待完成或先停止任务');
-        if (useStudio.getState().busy) throw Error('工程正在处理中，请稍候');
+        if (useAgent.getState().sessions.some(session => session.running)) throw Error(tr("Agent 仍在执行任务，请等待完成或先停止任务"));
+        if (useStudio.getState().busy) throw Error(tr("工程正在处理中，请稍候"));
         if (dirtyFiles(useStudio.getState()).length) {
           await useStudio.getState().save();
-          if (dirtyFiles(useStudio.getState()).length) throw Error(useStudio.getState().error || '工程未能全部保存，更新安装已取消');
+          if (dirtyFiles(useStudio.getState()).length) throw Error(useStudio.getState().error || tr("工程未能全部保存，更新安装已取消"));
         }
         await useAgent.getState().flush();
-        if (dirtyFiles(useStudio.getState()).length) throw Error('工程又有新的修改，请保存后重新安装');
+        if (dirtyFiles(useStudio.getState()).length) throw Error(tr("工程又有新的修改，请保存后重新安装"));
         receive(await window.studio.updates.install());
       } catch (error) { set({ error: (error as Error).message }); }
       finally { set({ preparing: false }); }

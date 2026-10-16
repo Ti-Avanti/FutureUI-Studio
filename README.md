@@ -8,12 +8,12 @@ A desktop editor for Minecraft FutureUI menus, combining a canvas, YAML, action 
 
 ## 下载 / Downloads
 
-当前版本：**0.1.2 · Windows x64**。
+当前版本：**0.1.3 · Windows x64**。
 
 | 文件 / File | 下载 / Download |
 | --- | --- |
-| 安装版，支持应用内手动更新 / Installer with manual in-app updates | [Setup 0.1.2](https://github.com/Ti-Avanti/FutureUI-Studio/releases/download/v0.1.2/FutureUI-Studio-Setup-0.1.2.exe) |
-| 便携版 / Portable | [Portable 0.1.2](https://github.com/Ti-Avanti/FutureUI-Studio/releases/download/v0.1.2/FutureUI-Studio-0.1.2-Portable.exe) |
+| 安装版，支持应用内手动更新 / Installer with manual in-app updates | [Setup 0.1.3](https://github.com/Ti-Avanti/FutureUI-Studio/releases/download/v0.1.3/FutureUI-Studio-Setup-0.1.3.exe) |
+| 便携版 / Portable | [Portable 0.1.3](https://github.com/Ti-Avanti/FutureUI-Studio/releases/download/v0.1.3/FutureUI-Studio-0.1.3-Portable.exe) |
 | 全部版本与更新说明 / Versions and release notes | [Releases](https://github.com/Ti-Avanti/FutureUI-Studio/releases) |
 
 普通用户只需下载安装版或便携版，无需单独安装 Node.js。`.blockmap` 与 `latest.yml` 供更新程序使用。便携版需要先安装一次 Setup 才能使用应用内安装更新。
@@ -22,13 +22,13 @@ Users need only the installer or portable build; a separate Node.js installation
 
 ## 使用手册 / User guides
 
-两份手册各 **32 页**，包含真实界面截图、可点击目录、逐步练习和常见问题。英文版保留中文界面标签并附解释，方便对照软件操作。界面当前为中文；底部语言选择用于菜单预览。
+两份手册各 **32 页**，包含真实界面截图、可点击目录、逐步练习和常见问题。英文版保留中文界面标签并附解释，方便对照软件操作。编辑器支持中英文，默认跟随系统；顶部语言图标可手动选择并记住偏好。底部语言选择独立控制菜单预览。
 
-Both **32-page** guides include actual screenshots, clickable contents, step-by-step exercises and troubleshooting. The English guide retains Chinese UI labels with explanations. The application UI is currently Chinese; its language selector changes the menu preview.
+Both **32-page** guides include actual screenshots, clickable contents, step-by-step exercises and troubleshooting. The English guide retains Chinese UI labels with explanations. The editor supports Chinese and English, follows the system by default, and remembers a manual choice from the top language icon. The status-bar language selector independently controls menu previews.
 
-- [中文 PDF · 下载](https://github.com/Ti-Avanti/FutureUI-Studio/releases/download/v0.1.2/FutureUI-Studio-Guide-zh-CN.pdf) · [仓库内预览](docs/manuals/FutureUI-Studio-Guide-zh-CN.pdf)
-- [English PDF · Download](https://github.com/Ti-Avanti/FutureUI-Studio/releases/download/v0.1.2/FutureUI-Studio-Guide-en.pdf) · [Repository preview](docs/manuals/FutureUI-Studio-Guide-en.pdf)
-- [教程示例 ZIP / Tutorial examples](https://github.com/Ti-Avanti/FutureUI-Studio/releases/download/v0.1.2/FutureUI-Studio-Tutorial-Examples.zip) · [Browse examples](docs/manuals/examples)
+- [中文 PDF · 下载](https://github.com/Ti-Avanti/FutureUI-Studio/releases/download/v0.1.3/FutureUI-Studio-Guide-zh-CN.pdf) · [仓库内预览](docs/manuals/FutureUI-Studio-Guide-zh-CN.pdf)
+- [English PDF · Download](https://github.com/Ti-Avanti/FutureUI-Studio/releases/download/v0.1.3/FutureUI-Studio-Guide-en.pdf) · [Repository preview](docs/manuals/FutureUI-Studio-Guide-en.pdf)
+- [教程示例 ZIP / Tutorial examples](https://github.com/Ti-Avanti/FutureUI-Studio/releases/download/v0.1.3/FutureUI-Studio-Tutorial-Examples.zip) · [Browse examples](docs/manuals/examples)
 
 手册覆盖安装、工程目录、画布与源码、布局与模板、交互、变量与语言、商品数据、资源、动画、导入合并、导出、操作节点与保存节点、模型连接、Skill、多会话与压缩、服务器发布和更新。
 
@@ -43,6 +43,9 @@ The guides cover installation, project structure, canvas and source editing, lay
 5. AI 为可选功能：填写自己的 Base URL、API Key、模型 ID 和上下文上限，再启用所需 Skill。 / AI is optional: configure your Base URL, API key, model ID and context limit, then enable the required Skills.
 
 ## 功能 / Features
+
+- 界面语言自动跟随系统，也可手动选择中英文；切换保留未保存编辑和会话。 / Follow the system language or manually select Chinese or English without losing unsaved edits and sessions.
+- 小比例预览保留中文笔画，高倍查看保持像素风格；画布按屏幕像素对齐。 / Small previews preserve Chinese strokes, larger zoom levels retain the pixel style, and the canvas aligns with device pixels.
 
 - 可停靠工作区、像素画布、YAML 并排编辑、图层、属性、动作与帧动画。 / Dockable workspace, pixel canvas, split YAML view, layers, properties, action flows and frame animation.
 - YAML、ZIP 和目录导入；按组件 ID 合并；逐字段冲突选择与差异预览。 / YAML, ZIP and directory import, component-ID merging, per-field conflict choices and diff previews.

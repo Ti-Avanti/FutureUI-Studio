@@ -1,3 +1,4 @@
+const { tr } = require('../i18n.cjs');
 const { NsisUpdater } = require('electron-updater');
 const { loadConfiguration, preferenceStore, distribution } = require('./config.cjs');
 const { release, updateError } = require('./presentation.cjs');
@@ -38,7 +39,7 @@ class UpdateService {
       this.attachEvents();
       this.schedule(true);
     } catch (error) {
-      this.patch({ phase: 'error', error: '更新模块无法初始化，请检查发布配置或重新安装编辑器。' });
+      this.patch({ phase: 'error', error: tr("更新模块无法初始化，请检查发布配置或重新安装编辑器。") });
     }
   }
 
@@ -79,7 +80,7 @@ class UpdateService {
 
   async setAutoCheck(value) {
     await this.ready;
-    if (this.state.phase === 'installing') throw Error('正在安装更新，请稍候');
+    if (this.state.phase === 'installing') throw Error(tr("正在安装更新，请稍候"));
     await this.preferences.save(value);
     this.patch({ autoCheck: value });
     this.schedule();
@@ -111,9 +112,9 @@ class UpdateService {
     await this.ready;
     if (this.checkPromise) await this.checkPromise;
     if (this.downloadPromise || ['downloaded', 'installing'].includes(this.state.phase)) return this.state;
-    if (!this.updater) throw Error('请安装正式安装版后使用应用内更新');
+    if (!this.updater) throw Error(tr("请安装正式安装版后使用应用内更新"));
     if (!this.cancellationToken || this.cancellationToken.cancelled || this.state.phase === 'error') await this.check();
-    if (this.state.phase !== 'available') throw Error('请先检查并找到可用的新版本');
+    if (this.state.phase !== 'available') throw Error(tr("请先检查并找到可用的新版本"));
     this.patch({ phase: 'downloading', percent: 0, transferred: 0, total: 0, error: '', cancelling: false });
     this.downloadPromise = this.performDownload().finally(() => { this.downloadPromise = null; });
     return this.state;
@@ -138,7 +139,7 @@ class UpdateService {
 
   async install() {
     await this.ready;
-    if (this.state.phase !== 'downloaded' || !this.updater) throw Error('请先完成更新包下载');
+    if (this.state.phase !== 'downloaded' || !this.updater) throw Error(tr("请先完成更新包下载"));
     const reason = this.canInstall();
     if (reason) throw Error(reason);
     this.patch({ phase: 'installing', error: '' });

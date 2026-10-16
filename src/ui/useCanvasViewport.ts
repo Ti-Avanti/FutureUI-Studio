@@ -20,10 +20,15 @@ export function useCanvasViewport(width: number, height: number, view: string) {
   const fit = Math.max(.001, rawFit * dpr >= 2 ? Math.floor(rawFit * dpr * 2) / (dpr * 2) : Math.floor(rawFit * 100) / 100);
   const scale = zoom || fit;
   const snap = (value: number) => Math.round(value * dpr) / dpr;
+  const displayWidth = Math.max(1, Math.round(width * scale * dpr)) / dpr;
+  const displayHeight = Math.max(1, Math.round(height * scale * dpr)) / dpr;
+  const resolution = Math.min(scale * dpr, 8192 / Math.max(width, height));
   return {
-    stage, scale, dpr, pan, setPan,
-    left: snap((bounds.width - width * scale) / 2 + pan.x),
-    top: snap((bounds.height - height * scale) / 2 + 10 + pan.y),
+    stage, scale, dpr, pan, setPan, displayWidth, displayHeight,
+    pixelWidth: Math.max(1, Math.round(width * resolution)),
+    pixelHeight: Math.max(1, Math.round(height * resolution)),
+    left: snap((bounds.width - displayWidth) / 2 + pan.x),
+    top: snap((bounds.height - displayHeight) / 2 + 10 + pan.y),
     reset: () => { useStudio.getState().set({ zoom: 0 }); setPan({ x: 0, y: 0 }); },
     zoomBy: (direction: number) => {
       const next = direction > 0 ? zoomSteps.find(v => v > scale + .01) ?? 4 : [...zoomSteps].reverse().find(v => v < scale - .01) ?? .5;

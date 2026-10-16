@@ -1,3 +1,4 @@
+import { tr } from '../i18n';
 import { create } from 'zustand';
 import { useStudio } from '../state/store';
 import type { ImportBatch, ImportChoice } from './types';
@@ -26,7 +27,7 @@ export const useTransfer = create<TransferState>((set, get) => ({
     const projectId = get().projectId;
     try {
       const batch = await window.studio.transfer.import(kind); if (!batch) return;
-      if (useStudio.getState().project?.id !== projectId) throw Error('工程已切换，请重新选择导入文件');
+      if (useStudio.getState().project?.id !== projectId) throw Error(tr("工程已切换，请重新选择导入文件"));
       const active = useStudio.getState().active;
       const folder = active.includes('/') ? active.slice(0, active.lastIndexOf('/')) : 'menus';
       const choices: ImportChoice[] = batch.entries.map(e => ({ id: e.id, path: e.path ?? `${folder}/${e.name}`, strategy: 'merge', selected: !e.error, preferred: 'current', conflicts: {} }));
