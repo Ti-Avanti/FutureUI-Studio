@@ -1,0 +1,46 @@
+{
+  "name": "futureui-studio",
+  "version": "0.1.1",
+  "private": true,
+  "type": "module",
+  "description": "FutureUI 桌面菜单编辑工作台",
+  "author": "Fotia",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc -b && vite build",
+    "start": "electron .",
+    "package": "npm run build && electron-builder --config electron-builder.config.cjs --win --dir",
+    "portable": "npm run build && electron-builder --config electron-builder.config.cjs --win portable --publish never",
+    "dist:win": "npm run build && electron-builder --config electron-builder.config.cjs --win nsis portable --publish never"
+  },
+  "dependencies": {
+    "adm-zip": "0.6.1",
+    "electron-updater": "6.8.10",
+    "rcon-client": "4.2.5",
+    "yaml": "2.9.1"
+  },
+  "devDependencies": {
+    "@monaco-editor/react": "4.7.0",
+    "@types/node": "26.6.5",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.2",
+    "dockview-react": "8.5.1",
+    "electron": "44.8.0",
+    "electron-builder": "26.15.3",
+    "lucide-react": "1.58.0",
+    "monaco-editor": "0.57.0",
+    "playwright": "1.64.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "react-markdown": "10.1.0",
+    "remark-gfm": "4.0.1",
+    "typescript": "7.0.2",
+    "vite": "8.3.4",
+    "zustand": "5.0.15"
+  },
+  "overrides": {
+    "dompurify": "3.4.17"
+  }
+}

@@ -1,0 +1,12 @@
+node_modules/
+dist/
+release/
+*.tsbuildinfo
+.codegraph/
+.futureui-studio/
+*.log
+artifacts/
+projects/
+dev-app-update.yml
+__pycache__/
+*.pyc

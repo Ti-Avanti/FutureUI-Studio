@@ -1,0 +1,7 @@
+{
+  "provider": "github",
+  "owner": "Ti-Avanti",
+  "repo": "FutureUI-Studio",
+  "checkOnStartup": true,
+  "checkIntervalMinutes": 240
+}

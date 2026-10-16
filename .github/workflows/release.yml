@@ -1,0 +1,75 @@
+name: Release FutureUI Studio
+
+on:
+  push:
+    tags: ['v*.*.*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: studio-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Check release identity
+        shell: pwsh
+        run: |
+          $package = Get-Content package.json -Raw | ConvertFrom-Json
+          $updates = Get-Content resources/updates.json -Raw | ConvertFrom-Json
+          $notes = Get-Content resources/release-notes.json -Raw | ConvertFrom-Json
+          if ($env:GITHUB_REF_TYPE -ne 'tag' -or $env:GITHUB_REF_NAME -ne "v$($package.version)") {
+            throw '请选择与 package.json 版本一致的 v 标签发布。'
+          }
+          if ($env:GITHUB_REPOSITORY -ne "$($updates.owner)/$($updates.repo)") {
+            throw '发布仓库与更新源不一致，请先修改 resources/updates.json。'
+          }
+          if ($notes.version -ne $package.version) { throw '请更新对应版本的发布说明。' }
+      - run: npm ci
+      - name: Build installer and portable app
+        run: npm run dist:win
+      - name: Publish complete release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          $package = Get-Content package.json -Raw | ConvertFrom-Json
+          $notes = Get-Content resources/release-notes.json -Raw | ConvertFrom-Json
+          $tag = "v$($package.version)"
+          $assets = @(
+            "release/FutureUI-Studio-Setup-$($package.version).exe",
+            "release/FutureUI-Studio-Setup-$($package.version).exe.blockmap",
+            "release/FutureUI-Studio-$($package.version)-Portable.exe",
+            'release/latest.yml'
+          )
+          foreach ($asset in $assets) {
+            if (-not (Test-Path -LiteralPath $asset -PathType Leaf)) { throw "发布文件缺失：$asset" }
+          }
+          $notesPath = Join-Path $env:RUNNER_TEMP 'futureui-studio-release.txt'
+          $body = @($notes.title, '') + @($notes.changes | ForEach-Object { "- $_" }) + @('', '首次使用请安装 Setup 版本。便携版不支持应用内安装更新。')
+          [System.IO.File]::WriteAllText($notesPath, ($body -join "`n"), [System.Text.UTF8Encoding]::new($false))
+          $draft = gh release view $tag --json isDraft --jq '.isDraft' 2>$null
+          if ($LASTEXITCODE -eq 0) {
+            if ($draft -ne 'true') { throw '此版本已经发布；请增加版本号，不能覆盖用户正在使用的更新包。' }
+            gh release edit $tag --title "FutureUI Studio $($package.version)" --notes-file $notesPath
+            if ($LASTEXITCODE -ne 0) { throw '更新草稿发布说明失败。' }
+          } else {
+            gh release create $tag --verify-tag --draft --title "FutureUI Studio $($package.version)" --notes-file $notesPath
+            if ($LASTEXITCODE -ne 0) { throw '创建发布草稿失败。' }
+          }
+          gh release upload $tag @assets --clobber
+          if ($LASTEXITCODE -ne 0) { throw '上传失败，发布保持草稿状态。' }
+          gh release edit $tag --draft=false --latest
+          if ($LASTEXITCODE -ne 0) { throw '公开发布失败。' }
