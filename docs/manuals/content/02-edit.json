@@ -1,0 +1,665 @@
+[
+  {
+    "id": "yaml",
+    "section": [
+      "05 / 可视化编辑",
+      "05 / VISUAL EDITING"
+    ],
+    "title": [
+      "画布和 YAML 一起使用",
+      "Use the canvas and YAML together"
+    ],
+    "blocks": [
+      {
+        "kind": "steps",
+        "items": [
+          [
+            "点击画布工具栏“画布与源码并排”。左边看效果，右边改 YAML；只需要写配置时切换“YAML 源码”。",
+            "Click 画布与源码并排 (Canvas and YAML side by side). Inspect the result while editing YAML. Switch to YAML 源码 (YAML source) when you want the code view alone."
+          ],
+          [
+            "找到 `hello_button` 的 `text`，修改引号内的文字。保持缩进和组件 ID 不变，观察预览更新。",
+            "Find the `text` under `hello_button` and edit the quoted string. Keep indentation and the component ID intact, then observe the preview."
+          ],
+          [
+            "把光标放在未知字段附近时，可使用编辑器提供的补全和校验信息。底部“问题”列出可定位的配置问题。",
+            "Use the editor's completions and validation messages when working with fields. The bottom 问题 (Problems) panel lists configuration issues you can locate."
+          ],
+          [
+            "出现错误时先修复 YAML。保存前查看“问题”并执行“配置检查”，不要只凭画布判断配置完整。",
+            "Fix YAML errors first. Before saving, review Problems and run 配置检查 (Configuration check). The canvas alone is not a complete validator."
+          ],
+          [
+            "需要确认自己改了哪些内容时，打开“操作与回退”，选节点查看差异；确认后保存。",
+            "To review what changed, open 操作与回退 (Operations and restore), select a node and inspect its diff. Save when satisfied."
+          ]
+        ]
+      },
+      {
+        "kind": "table",
+        "headers": [
+          [
+            "写法",
+            "说明"
+          ],
+          [
+            "Syntax",
+            "Explanation"
+          ]
+        ],
+        "rows": [
+          [
+            [
+              "两个空格缩进",
+              "用空格表示层级；不要混用 Tab。"
+            ],
+            [
+              "Two-space indentation",
+              "Use spaces to represent nesting. Do not mix tabs and spaces."
+            ]
+          ],
+          [
+            [
+              "`- id: hello_button`",
+              "列表中的一个组件；同一组件列表里的 ID 应唯一。"
+            ],
+            [
+              "`- id: hello_button`",
+              "A component in a list. Keep IDs unique in that component list."
+            ]
+          ],
+          [
+            [
+              "`text: '<!i>Say hello'`",
+              "含 MiniMessage 标签的文字加引号；<!i> 关闭默认斜体。"
+            ],
+            [
+              "`text: '<!i>Say hello'`",
+              "Quote strings containing MiniMessage tags. <!i> disables default italics."
+            ]
+          ],
+          [
+            [
+              "`text: '@tutorial.greeting'`",
+              "语言键引用，以 @ 开头时尤其要保留引号。"
+            ],
+            [
+              "`text: '@tutorial.greeting'`",
+              "A translation-key reference. Keep quotes, particularly around strings beginning with @."
+            ]
+          ],
+          [
+            [
+              "`true` / `false`、`36`",
+              "布尔值和数字不需要引号；按实际字段类型填写。"
+            ],
+            [
+              "`true` / `false`, `36`",
+              "Booleans and numbers usually need no quotes. Match the field's actual type."
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "callout",
+        "title": [
+          "别把两种撤销混在一起",
+          "Two kinds of undo"
+        ],
+        "text": [
+          "在源码或输入框内，Ctrl+Z 通常由文本编辑器处理；离开输入框后，工作区撤销处理组件或导入等整体操作。跨文件回退优先使用“操作与回退”查看差异。",
+          "Inside a text editor, Ctrl+Z normally undoes text edits. Outside text fields, workspace undo handles component edits or grouped operations such as imports. For cross-file restores, use Operations and restore to inspect the diff."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "actions",
+    "section": [
+      "06 / 交互",
+      "06 / INTERACTION"
+    ],
+    "title": [
+      "让按钮真正执行动作",
+      "Give a button an action"
+    ],
+    "blocks": [
+      {
+        "kind": "steps",
+        "items": [
+          [
+            "选择 `hello_button`，切换顶部“交互”，或右侧“事件”。选中组件时编辑它的 actions；未选中组件时编辑菜单 on-open。",
+            "Select `hello_button` and open 交互 (Interaction), or the Inspector's 事件 (Events) tab. With a component selected you edit its actions; otherwise you edit the menu's on-open flow."
+          ],
+          [
+            "教程按钮已有 message 动作。选中它，修改 text，点击“应用参数”。参数编辑区使用 JSON，键名和字符串使用双引号。",
+            "The tutorial button already has a message action. Select it, change text and click 应用参数 (Apply parameters). This parameter editor uses JSON: quote keys and strings with double quotes."
+          ],
+          [
+            "通过动作类型下拉框添加动作；按执行顺序排列。需要跳页时使用 open-menu，并填写目标菜单 id，例如 compact/main。",
+            "Add actions using the action-type selector and arrange them in execution order. For navigation use open-menu and a menu ID such as compact/main."
+          ],
+          [
+            "打开“交互模拟”，点击画布按钮，观察本地提示或变量变化。随后关闭模拟，继续设计。",
+            "Enable 交互模拟 (Interaction simulation), click the canvas button and observe local messages or variable changes. Exit simulation to continue designing."
+          ],
+          [
+            "真实购买、命令和第三方插件操作必须把配置部署到服务器后验证；模拟器不会给玩家扣钱或执行服务器命令。",
+            "Verify real purchases, commands and integrations after deployment to a server. The simulator does not charge players or execute server commands."
+          ]
+        ]
+      },
+      {
+        "kind": "figure",
+        "file": "actions.png",
+        "height": 245,
+        "caption": [
+          "实际动作面板：一个按钮的消息动作。",
+          "Actual action panel showing the button's message action."
+        ]
+      },
+      {
+        "kind": "table",
+        "headers": [
+          [
+            "概念",
+            "用途"
+          ],
+          [
+            "Concept",
+            "Purpose"
+          ]
+        ],
+        "rows": [
+          [
+            [
+              "`condition`",
+              "动作条件不满足时跳过该动作。"
+            ],
+            [
+              "`condition`",
+              "Skip that action when its condition fails."
+            ]
+          ],
+          [
+            [
+              "`require`",
+              "前置校验失败时中止当前流程。"
+            ],
+            [
+              "`require`",
+              "Stop the current flow when a prerequisite fails."
+            ]
+          ],
+          [
+            [
+              "`if` / `then` / `else`",
+              "按条件选择不同动作分支。"
+            ],
+            [
+              "`if` / `then` / `else`",
+              "Choose between branches based on a condition."
+            ]
+          ],
+          [
+            [
+              "按钮状态与动作",
+              "“选中”“悬停”是外观；是否可用还要结合条件和实际流程。"
+            ],
+            [
+              "State versus action",
+              "Selected and hovered are visual states. Availability also depends on conditions and the actual flow."
+            ]
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "data",
+    "section": [
+      "07 / 数据与语言",
+      "07 / DATA AND LANGUAGES"
+    ],
+    "title": [
+      "用不同玩家数据检查菜单",
+      "Preview player data and translations"
+    ],
+    "blocks": [
+      {
+        "kind": "steps",
+        "items": [
+          [
+            "切换“数据与语言”。预览变量使用 JSON，例如把 player.name 改成较长名字，再点击“应用预览变量”。",
+            "Open 数据与语言 (Data and languages). Preview variables are JSON. Change player.name to a longer name, then click 应用预览变量 (Apply preview variables)."
+          ],
+          [
+            "先试低余额、长名称、空列表等预设。它们只改变本地预览，不修改服务器里的玩家数据。",
+            "Try presets such as low balance, long name and empty list. These affect local previews only; they do not modify server player data."
+          ],
+          [
+            "把教程的 03-language-entries 目录导入并保存。它包含 languages/zh_cn/tutorial.yml 和 languages/en_us/tutorial.yml。",
+            "Import and save the tutorial folder 03-language-entries. It contains languages/zh_cn/tutorial.yml and languages/en_us/tutorial.yml."
+          ],
+          [
+            "将 greeting 组件的 text 改成 `@tutorial.greeting`，在 YAML 中保留引号。然后切换底部“简体中文 / English”比较文案。",
+            "Change the greeting component's text to `@tutorial.greeting`, keeping quotes in YAML. Switch 简体中文 / English at the bottom to compare translations."
+          ],
+          [
+            "想编辑商品时，在商品数据区域选择店铺文件，修改名称、价格或每份数量，再保存对应 YAML。",
+            "To edit products, choose a shop file in the product-data area, change a name, price or bundle amount, and save the corresponding YAML."
+          ]
+        ]
+      },
+      {
+        "kind": "figure",
+        "file": "data.png",
+        "height": 255,
+        "caption": [
+          "预览变量与语言数据用于检查边界情况。",
+          "Preview variables and language data help inspect edge cases."
+        ]
+      },
+      {
+        "kind": "callout",
+        "title": [
+          "份数与物品数量不是一回事",
+          "Bundles are not individual items"
+        ],
+        "text": [
+          "例如每份 16 个物品、每份价格 8 金币，购买 3 份等于 48 个物品、总价 24 金币。余额、背包容量及购买规则仍由服务器最终判定。",
+          "At 16 items and 8 coins per bundle, buying 3 bundles means 48 items and 24 coins. Balance, inventory capacity and purchase rules are ultimately checked by the server."
+        ]
+      },
+      {
+        "kind": "p",
+        "text": [
+          "底部语言切换只改变**菜单预览语言**，不会把 Studio 的操作界面翻译成英文。PAPI 和第三方插件变量在离线预览中不等于实时解析；需要提供预览值或进入游戏确认。",
+          "The bottom language selector changes the **menu preview language**, not Studio's interface language. Offline previews do not query live PAPI or third-party plugins; provide representative values or verify in game."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "assets",
+    "section": [
+      "08 / 资源",
+      "08 / ASSETS"
+    ],
+    "title": [
+      "导入像素图片并交给组件",
+      "Import pixel art and use it in a menu"
+    ],
+    "blocks": [
+      {
+        "kind": "steps",
+        "items": [
+          [
+            "打开“资源”工作区，或底部“资源库 > 图片”。点击“导入 PNG”，选择像素图片；单张文件不得超过 8 MB。",
+            "Open 资源 (Assets), or 面板 > 资源库 > 图片 (Panel > Asset library > Images). Click 导入 PNG (Import PNG). Each image must be no larger than 8 MB."
+          ],
+          [
+            "导入后图片立即复制到 assets/textures/studio；图片定义加入 assets/images/studio.yml。按 Ctrl+S 保存注册配置。",
+            "The image is copied immediately into assets/textures/studio. Its definition is added to assets/images/studio.yml. Press Ctrl+S to save that registration."
+          ],
+          [
+            "先选择图片组件，再双击资源卡片可替换它的图片；未选中图片组件时，双击会插入新图片组件。",
+            "Select an image component and double-click an asset card to replace its image. Without an image component selected, double-clicking inserts a new one."
+          ],
+          [
+            "在属性中调整显示尺寸，使用 100% 或更高缩放检查像素。对于像素图，尽量使用整数倍尺寸，避免文字和细线模糊。",
+            "Adjust the display size in the Inspector. Inspect pixels at 100% or higher zoom. Integer scale factors help keep pixel art, small text and lines crisp."
+          ],
+          [
+            "要请 Agent 使用某张图片，点击资源卡片上的“发送给 Agent”，或把卡片拖到 Agent 输入区。",
+            "To have Agent use an image, click its 发送给 Agent (Send to Agent) control or drag the asset into the Agent composer."
+          ]
+        ]
+      },
+      {
+        "kind": "figure",
+        "file": "assets.png",
+        "height": 250,
+        "caption": [
+          "资源库中的图片可插入画布，也可作为 Agent 上下文。",
+          "Assets can be inserted into the canvas or attached as Agent context."
+        ]
+      },
+      {
+        "kind": "callout",
+        "title": [
+          "资源和 YAML 的保存方式不同",
+          "Assets and YAML are saved differently"
+        ],
+        "text": [
+          "PNG 文件导入后已经存在于磁盘，撤销 YAML 操作不会删除它。保存节点只还原 YAML；要保留完整工程，请备份资源目录。导出 ZIP 时勾选包含资源。",
+          "An imported PNG already exists on disk. Undoing a YAML operation does not delete it, and saved restore points cover YAML only. Back up asset folders for a complete project and include assets when exporting a ZIP."
+        ]
+      },
+      {
+        "kind": "p",
+        "text": [
+          "默认图片注册的 canvas-height、height 为 64，ascent 为 56。按实际资源需求调整，不要把所有图片都拉成同一个比例。缺图时检查图片 ID、注册文件和实际文件路径是否一致。",
+          "New image registrations default to canvas-height 64, height 64 and ascent 56. Adjust for the asset rather than stretching every image to the same ratio. For missing images, check the image ID, its definition and the physical path."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "motion",
+    "section": [
+      "09 / 状态与动效",
+      "09 / STATES AND MOTION"
+    ],
+    "title": [
+      "检查悬停、选中和帧动画",
+      "Inspect hover, selection and frame animation"
+    ],
+    "blocks": [
+      {
+        "kind": "steps",
+        "items": [
+          [
+            "选择一个按钮，在画布顶部依次切换默认、悬停、选中、禁用状态。检查可点击按钮和不可用按钮是否容易区分。",
+            "Select a button and cycle through normal, hovered, selected and disabled states above the canvas. Confirm that interactive and unavailable controls are visually distinct."
+          ],
+          [
+            "切换“动效”，选择需要动画的组件。时间轴用于按帧配置已有的图片或皮肤变化。",
+            "Open 动效 (Motion) and select the component to animate. The timeline configures frame-based changes to images or skins."
+          ],
+          [
+            "添加帧后选中该帧，调整对应图片或皮肤。新增帧可以沿用上一帧内容，再逐帧修改。",
+            "Add a frame, select it and change its image or skin. New frames can inherit the previous frame, ready for individual edits."
+          ],
+          [
+            "设置 interval-ticks 与 loop。1 tick 是 50 毫秒，例如 4 ticks 为 0.2 秒；循环动画启用 loop。",
+            "Set interval-ticks and loop. One tick is 50 ms, so 4 ticks is 0.2 seconds. Enable loop for repeating animation."
+          ],
+          [
+            "使用时间轴播放控件预览，再保存。静态预览中的帧效果仍需在游戏里检查资源和着色器表现。",
+            "Preview with the timeline playback controls, then save. Verify the assets and shaders in game as well."
+          ]
+        ]
+      },
+      {
+        "kind": "table",
+        "headers": [
+          [
+            "你要的效果",
+            "建议操作"
+          ],
+          [
+            "Desired result",
+            "Suggested approach"
+          ]
+        ],
+        "rows": [
+          [
+            [
+              "按钮悬停变亮",
+              "配置主题皮肤的悬停表现，并用悬停状态检查。"
+            ],
+            [
+              "Brighter button on hover",
+              "Configure the theme's hover appearance and inspect the hovered state."
+            ]
+          ],
+          [
+            [
+              "图标依次切换",
+              "准备多张像素图，使用帧动画依次引用。"
+            ],
+            [
+              "Cycling icons",
+              "Prepare multiple pixel images and reference them in animation frames."
+            ]
+          ],
+          [
+            [
+              "点击后保持绿色",
+              "由变量或条件决定选中状态，配合按钮动作更新数据。"
+            ],
+            [
+              "A green state after selection",
+              "Use variables or conditions for the selected state and actions to update the data."
+            ]
+          ],
+          [
+            [
+              "旋转或复杂 3D 效果",
+              "不要添加未支持的字段；以插件能力和实际资源方案为准。"
+            ],
+            [
+              "Rotation or complex 3D effects",
+              "Do not invent unsupported fields. Use the plugin's implemented capabilities and actual asset approach."
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "callout",
+        "title": [
+          "状态预览不会替你写逻辑",
+          "State preview does not create logic"
+        ],
+        "text": [
+          "把预览切到“选中”只是检查外观，不会自动给按钮增加多选、购买或持久化逻辑。行为配置在交互中完成。",
+          "Switching the preview to selected only inspects appearance. It does not automatically implement multiple selection, purchases or persistence. Configure behavior in Interaction."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "batch-import",
+    "section": [
+      "10 / 导入",
+      "10 / IMPORT"
+    ],
+    "title": [
+      "批量导入配置文件",
+      "Import multiple configuration files"
+    ],
+    "blocks": [
+      {
+        "kind": "steps",
+        "items": [
+          [
+            "按 Ctrl+Shift+I。单文件或 ZIP 用“选择 YAML / ZIP”；现成目录用“选择目录”。",
+            "Press Ctrl+Shift+I. Use 选择 YAML / ZIP (Choose YAML/ZIP) for files or archives, and 选择目录 (Choose directory) for folders."
+          ],
+          [
+            "导入扫描完成后查看文件列表，取消勾选这次不需要的文件。ZIP 与目录仅导入 YAML；其他文件会计入跳过数量。",
+            "After scanning, review the file list and uncheck anything you do not need. ZIP and directory imports read YAML only; other files are counted as skipped."
+          ],
+          [
+            "逐个检查“目标路径”。路径相对于工程根目录，例如 menus/tutorial/hello.yml；不要输入绝对路径或 ..。",
+            "Check each 目标路径 (Target path). It is relative to the project root, for example menus/tutorial/hello.yml. Do not enter absolute paths or .. segments."
+          ],
+          [
+            "同名文件要选择合并、替换或保留，再检查差异。有红色阻止提示时，先处理重复键、目标冲突或缺失引用。",
+            "For existing files choose merge, replace or keep, then review the diff. Resolve blocking errors such as duplicate YAML keys, target collisions or missing references."
+          ],
+          [
+            "点击“应用导入”。全部选中文件会成为一个整体操作节点；查看画布和问题面板后再按 Ctrl+S。",
+            "Click 应用导入 (Apply import). The selected files become one grouped operation. Inspect the canvas and Problems panel before pressing Ctrl+S."
+          ]
+        ]
+      },
+      {
+        "kind": "table",
+        "headers": [
+          [
+            "输入限制",
+            "处理方法"
+          ],
+          [
+            "Limit",
+            "What to do"
+          ]
+        ],
+        "rows": [
+          [
+            [
+              "单个 YAML 8 MB；总计 64 MB",
+              "超过限制时拆分配置包。"
+            ],
+            [
+              "8 MB per YAML; 64 MB total",
+              "Split oversized configuration packages."
+            ]
+          ],
+          [
+            [
+              "最多 4000 个配置文件",
+              "按功能目录分批导入。"
+            ],
+            [
+              "Up to 4,000 configuration files",
+              "Import functional folders in smaller batches."
+            ]
+          ],
+          [
+            [
+              "ZIP 最多 12000 个条目",
+              "只保留相关配置和需要的目录结构。"
+            ],
+            [
+              "Up to 12,000 ZIP entries",
+              "Keep only relevant configuration and directory structure."
+            ]
+          ],
+          [
+            [
+              "UTF-8 内容",
+              "导入可去除 UTF-8 BOM；其他错误编码应先转换。"
+            ],
+            [
+              "UTF-8 content",
+              "Import removes a UTF-8 BOM, but invalid encodings must be converted first."
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "callout",
+        "title": [
+          "完整资源包不能只靠 YAML 导入",
+          "YAML import is not a complete asset import"
+        ],
+        "text": [
+          "图片可在资源库导入；已有完整资源目录可手动复制到工程相应位置后重新读取。只导入 YAML 不会自动补齐 PNG、着色器或第三方插件资源。",
+          "Import images through the asset library. Existing resource folders can be copied into the appropriate project location and then reread. YAML import alone does not supply missing PNGs, shaders or third-party resources."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "merge",
+    "section": [
+      "10 / 导入",
+      "10 / IMPORT"
+    ],
+    "title": [
+      "合并、替换、保留怎么选",
+      "Choose merge, replace or keep"
+    ],
+    "blocks": [
+      {
+        "kind": "table",
+        "headers": [
+          [
+            "方式",
+            "实际结果",
+            "适用情况"
+          ],
+          [
+            "Mode",
+            "What it does",
+            "Use it when"
+          ]
+        ],
+        "rows": [
+          [
+            [
+              "合并字段",
+              "递归合并对象，保留未涉及字段；冲突值由你选择。",
+              "导入局部补丁，保留原配置。"
+            ],
+            [
+              "合并字段 (Merge)",
+              "Recursively merges maps and retains untouched fields; you choose conflicting values.",
+              "Applying a partial patch while preserving existing configuration."
+            ]
+          ],
+          [
+            [
+              "替换文件",
+              "整个目标文件变为导入内容；未包含的旧字段会消失。",
+              "导入经过确认的完整文件。"
+            ],
+            [
+              "替换文件 (Replace)",
+              "Replaces the entire file; old fields absent from the incoming file disappear.",
+              "Importing a reviewed, complete file."
+            ]
+          ],
+          [
+            [
+              "保留现有",
+              "现有文件不变。",
+              "这次不更新这个同名文件。"
+            ],
+            [
+              "保留现有 (Keep)",
+              "Leaves the existing file unchanged.",
+              "Skipping an update to this existing file."
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "p",
+        "text": [
+          "组件列表中，每项都有唯一字符串 id 时，合并按 id 对应：相同 id 合并字段，新 id 追加。已有顺序保留。动作等没有唯一 id 的列表按**整体值**处理，不会盲目追加。",
+          "If every list entry has a unique string ID, merge matches entries by ID: matching entries merge fields and new IDs append. Existing order is retained. Lists without unique IDs, including many action lists, are treated as **whole values**, not blindly appended."
+        ]
+      },
+      {
+        "kind": "steps",
+        "items": [
+          [
+            "保持第一个菜单已保存，导入教程中的 02-merge-update 目录。",
+            "Save the first menu, then import the tutorial's 02-merge-update directory."
+          ],
+          [
+            "确认目标是 menus/tutorial/hello.yml，方式选择“合并字段”。",
+            "Confirm the target is menus/tutorial/hello.yml and choose 合并字段 (Merge)."
+          ],
+          [
+            "展开“2 处不同值”，对 heading.text 与 hello_button.text 分别决定采用哪个值。",
+            "Expand 2 处不同值 (2 different values), then choose which text to use for heading and hello_button."
+          ],
+          [
+            "右侧应仍包含原 greeting，同时新增 close_button；如果整个布局消失，检查是否误选了替换。",
+            "The result should retain greeting and add close_button. If the full layout disappears, check that you did not select Replace."
+          ],
+          [
+            "应用后检查两个按钮，保存。练习撤销时，一次撤销应还原整批导入。",
+            "Apply, inspect both buttons and save. A single workspace undo should revert the whole import batch."
+          ]
+        ]
+      },
+      {
+        "kind": "callout",
+        "title": [
+          "清空字段与删除字段",
+          "Clearing versus deleting fields"
+        ],
+        "text": [
+          "补丁里不写某字段，合并会保留旧字段。要有意删除旧结构，请直接编辑目标 YAML，或用完整文件替换后检查差异。",
+          "Omitting a field from a patch preserves the old field during merge. To intentionally delete old structure, edit the target YAML directly or replace it with a complete file after reviewing the diff."
+        ]
+      }
+    ]
+  }
+]

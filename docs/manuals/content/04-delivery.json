@@ -1,0 +1,818 @@
+[
+  {
+    "id": "context",
+    "section": [
+      "13 / AGENT",
+      "13 / AGENT"
+    ],
+    "title": [
+      "多会话、用量圆环与自动压缩",
+      "Manage sessions, context usage and compression"
+    ],
+    "blocks": [
+      {
+        "kind": "steps",
+        "items": [
+          [
+            "点击“创建新会话”，为一个独立任务使用新会话。通过会话标签或“会话历史”切换；每个工程最多保存 100 个会话。",
+            "Click 创建新会话 (Create conversation) for an independent task. Switch through tabs or 会话历史 (Conversation history). Each project retains up to 100 conversations."
+          ],
+          [
+            "先停止正在运行的任务，再归档或删除会话。关闭标签可归档，会话历史中的删除操作会移除记录。",
+            "Stop an active task before archiving or deleting a conversation. Closing its tab can archive it; deletion in conversation history removes the record."
+          ],
+          [
+            "查看上下文用量小圆环。请求前按本地估算显示，请求后可使用接口返回的 Token 用量；它不是账单金额。",
+            "Inspect the context-usage ring. Before a request it uses a local estimate; afterward it can use API-reported token usage. It is not a billing amount."
+          ],
+          [
+            "在模型设置中填写模型真实上下文上限和压缩阈值。不要为了消除超限提示，填写模型不支持的容量。",
+            "Set the real context capacity and compression threshold in model settings. Do not invent a larger capacity merely to hide overflow warnings."
+          ],
+          [
+            "接近阈值时，Agent 将旧上下文整理成摘要供后续请求使用；完整聊天记录仍保留。点击圆环可查看用量和最近的压缩摘要；当前版本没有单独的手动压缩按钮。",
+            "Near the threshold, Agent summarizes older context for later requests while retaining the full conversation log. Click the ring to inspect usage and the latest summary. This version has no separate manual-compression button."
+          ]
+        ]
+      },
+      {
+        "kind": "table",
+        "headers": [
+          [
+            "设置默认值",
+            "作用"
+          ],
+          [
+            "Default",
+            "Purpose"
+          ]
+        ],
+        "rows": [
+          [
+            [
+              "上下文 128000 Token",
+              "本地预算初始值；必须按实际模型修正。"
+            ],
+            [
+              "128,000 context tokens",
+              "Initial local budget; adjust to the actual model."
+            ]
+          ],
+          [
+            [
+              "自动压缩阈值 85%",
+              "接近此比例时整理上下文，并考虑输出预留空间。"
+            ],
+            [
+              "85% compression threshold",
+              "Summarizes near this fraction while accounting for output reserve."
+            ]
+          ],
+          [
+            [
+              "最大输出 8192 Token",
+              "限制单次输出；实际预留不超过上下文的约 20%。"
+            ],
+            [
+              "8,192 maximum output tokens",
+              "Caps output; the reserve is at most about 20% of context."
+            ]
+          ],
+          [
+            [
+              "最多工具轮数 16",
+              "限制一次任务连续调用工具的轮数。"
+            ],
+            [
+              "16 tool rounds",
+              "Limits consecutive tool-use rounds within a task."
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "callout",
+        "title": [
+          "压缩失败如何处理",
+          "If compression fails"
+        ],
+        "text": [
+          "保留原会话，检查连接并重试；减少本次附件或另开会话。只有模型真实支持时才提高上下文上限。压缩需要请求模型服务，可能消耗该服务的额度。",
+          "Keep the original conversation, check the connection and retry; reduce attachments or start a new conversation. Increase capacity only if the model supports it. Compression calls the model service and may consume its quota."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "publish",
+    "section": [
+      "14 / 发布到服务器",
+      "14 / SERVER DEPLOYMENT"
+    ],
+    "title": [
+      "从本地预览到游戏内菜单",
+      "Deliver a menu to a Minecraft server"
+    ],
+    "blocks": [
+      {
+        "kind": "steps",
+        "items": [
+          [
+            "在“发布”工作区执行配置检查，先解决错误。确认菜单 id、语言键、资源与动作引用正确。",
+            "Run configuration checks in 发布 (Publish) and resolve errors. Confirm menu IDs, language keys, resources and action references."
+          ],
+          [
+            "保存工程，再导出需要的配置。首次交付完整工程时，选择全部配置并包含资源；更新局部页面时明确列出修改范围。",
+            "Save the project and export the needed configuration. For a full first delivery choose all configuration and include assets; for a page update define the exact scope."
+          ],
+          [
+            "先备份服务器现有配置，再将对应目录复制到 plugins/FutureUI。保留服务器自己的经济、数据库与资源包分发设置。",
+            "Back up the server configuration, then copy the matching directories into plugins/FutureUI. Preserve the server's own economy, database and resource-pack distribution settings."
+          ],
+          [
+            "由服务器管理员执行验证、重载，并按该服务器的方式构建和分发资源包。改了图片或主题时，不要只重载菜单 YAML。",
+            "Have the server administrator validate and reload, then build and distribute the resource pack through the server's configured process. Image or theme changes require more than YAML reload."
+          ],
+          [
+            "进入游戏检查按钮、语言、窗口缩放、交易与依赖插件行为。第三方菜单通常应从原插件入口打开，以建立对应业务会话。",
+            "In game, inspect buttons, language, window scaling, purchases and dependencies. Integrated third-party menus usually need their original plugin entry point to establish the business session."
+          ]
+        ]
+      },
+      {
+        "kind": "table",
+        "headers": [
+          [
+            "发布面板操作",
+            "RCON 发送的命令"
+          ],
+          [
+            "Publish action",
+            "RCON command"
+          ]
+        ],
+        "rows": [
+          [
+            [
+              "状态",
+              "`fui status`"
+            ],
+            [
+              "Status",
+              "`fui status`"
+            ]
+          ],
+          [
+            [
+              "验证",
+              "`fui validate`"
+            ],
+            [
+              "Validate",
+              "`fui validate`"
+            ]
+          ],
+          [
+            [
+              "重载",
+              "`fui reload`"
+            ],
+            [
+              "Reload",
+              "`fui reload`"
+            ]
+          ],
+          [
+            [
+              "构建资源包",
+              "`fui pack`"
+            ],
+            [
+              "Build resource pack",
+              "`fui pack`"
+            ]
+          ],
+          [
+            [
+              "为在线玩家打开",
+              "`fui openfor <player> <menuId>`"
+            ],
+            [
+              "Open for an online player",
+              "`fui openfor <player> <menuId>`"
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "callout",
+        "title": [
+          "RCON 是可选的远程命令入口",
+          "RCON is an optional command connection"
+        ],
+        "text": [
+          "需要服务器已启用 RCON。填写主机、端口（默认 25575）、密码和在线玩家名；密码只放在当前面板内存中。RCON 不替你上传配置，也不代表离线预览已经通过游戏验证。",
+          "The server must have RCON enabled. Enter host, port (default 25575), password and an online player's name. The password remains in the current panel's memory. RCON does not upload configuration or turn an offline preview into an in-game verification."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "updates",
+    "section": [
+      "15 / 更新与备份",
+      "15 / UPDATES AND BACKUP"
+    ],
+    "title": [
+      "收到更新提醒后手动升级",
+      "Update after receiving a notification"
+    ],
+    "blocks": [
+      {
+        "kind": "flow",
+        "items": [
+          [
+            "收到提醒",
+            "查看版本",
+            "手动下载",
+            "保存并安装",
+            "自动重启"
+          ],
+          [
+            "Notification",
+            "Review version",
+            "Download",
+            "Save and install",
+            "Relaunch"
+          ]
+        ]
+      },
+      {
+        "kind": "steps",
+        "items": [
+          [
+            "安装版默认启动约 8 秒后检查一次，运行时约每 4 小时再检查。也可以点击“更新”主动检查。",
+            "By default, the installed app checks about 8 seconds after launch and about every four hours while running. Click 更新 (Updates) to check manually."
+          ],
+          [
+            "发现新版本后，先阅读更新说明。未聚焦窗口时，系统允许通知的情况下也可收到桌面提醒。",
+            "When a version is available, read its notes. If the app is unfocused and system notifications are allowed, you may also receive a desktop notification."
+          ],
+          [
+            "点击下载。条件允许时使用差分下载，失败可回退到完整安装包；不保证每次都只下载少量数据。",
+            "Click Download. Differential downloading is used when possible and may fall back to a full installer. A small download is not guaranteed every time."
+          ],
+          [
+            "停止仍在运行的 Agent 任务，保存需要保留的修改，再点击安装更新。软件退出安装，并在完成后自动启动。",
+            "Stop active Agent work, save the edits you want to keep and click Install update. Studio exits for installation and launches automatically when finished."
+          ],
+          [
+            "重新进入后检查版本和上次工程。便携版用户先安装 Setup，才能使用应用内安装更新。",
+            "After relaunch, verify the version and last project. Portable users need to install Setup before using in-app update installation."
+          ]
+        ]
+      },
+      {
+        "kind": "table",
+        "headers": [
+          [
+            "备份对象",
+            "建议方式"
+          ],
+          [
+            "What to back up",
+            "How"
+          ]
+        ],
+        "rows": [
+          [
+            [
+              "菜单和资源",
+              "复制完整工程目录，保留 assets 和隐藏的 .futureui-studio。"
+            ],
+            [
+              "Menus and assets",
+              "Copy the whole project, including assets and hidden .futureui-studio."
+            ]
+          ],
+          [
+            [
+              "用于交付的配置",
+              "导出 ZIP；它不会包含操作历史或编辑器设置。"
+            ],
+            [
+              "Delivery configuration",
+              "Export a ZIP. It does not include operation history or editor settings."
+            ]
+          ],
+          [
+            [
+              "模型服务设置",
+              "迁移电脑后重新填写密钥，并检查协议、模型 ID 与容量。"
+            ],
+            [
+              "Model settings",
+              "Re-enter the key on another PC and verify protocol, model ID and capacity."
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "callout",
+        "title": [
+          "更新由用户确认安装",
+          "Installation remains your choice"
+        ],
+        "text": [
+          "检测到新版不会直接替你安装。关闭软件也不会自动安装已下载更新；使用更新窗口中的安装操作完成升级。",
+          "Finding a version does not install it automatically. Closing the app does not automatically install a downloaded update; use the installation action in the update window."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "exercise",
+    "section": [
+      "16 / 完整练习",
+      "16 / COMPLETE EXERCISE"
+    ],
+    "title": [
+      "从零完成一次编辑与交付",
+      "Complete an edit-and-deliver exercise"
+    ],
+    "blocks": [
+      {
+        "kind": "steps",
+        "items": [
+          [
+            "创建练习工程，导入 01-first-menu。打开 tutorial/hello 并保存，记住当前界面有一个消息按钮。",
+            "Create a practice project and import 01-first-menu. Open tutorial/hello and save. The menu initially has one message button."
+          ],
+          [
+            "把 hello_button 的高度改为 36，按钮文字改成自己的文案。使用悬停预览检查可点击效果。",
+            "Set hello_button height to 36 and change its label. Inspect its hovered appearance."
+          ],
+          [
+            "导入 02-merge-update，选择合并。让 heading 使用导入值，让 hello_button.text 保留当前值。检查新增关闭按钮。",
+            "Import 02-merge-update with Merge. Use the incoming heading but keep the current hello_button.text. Confirm that the new Close button appears."
+          ],
+          [
+            "导入 03-language-entries，把 greeting.text 改为 '@tutorial.greeting'。切换中英文，检查长短文案。",
+            "Import 03-language-entries and set greeting.text to '@tutorial.greeting'. Switch between Chinese and English and inspect text lengths."
+          ],
+          [
+            "保存所有文件。打开保存节点，查看练习前后的差异，但先不要回退。",
+            "Save all files. Open Saved points and inspect the before/after diff without restoring yet."
+          ],
+          [
+            "导出当前菜单 YAML 到工程外。再导出菜单与两份语言文件的 ZIP；需要交付完整主题时另做全量配置与资源包。",
+            "Export the current menu YAML outside the project. Then export the menu plus both language files as ZIP. For a full theme delivery, separately export all configuration and assets."
+          ],
+          [
+            "回到本次操作中的较早节点，查看画布变化，再前进到最新节点。没有确认前不要保存回退结果。",
+            "Move back to an earlier session node, inspect the canvas and move forward to the latest node. Do not save the restored state before confirming it."
+          ],
+          [
+            "可选：让 Agent 只优化这个页面的留白，保留动作与商品数据。审阅差异、应用、保存；最后在服务器验证。",
+            "Optional: ask Agent to refine only this page's spacing while retaining actions and product data. Review, apply and save, then verify on a server."
+          ]
+        ]
+      },
+      {
+        "kind": "callout",
+        "title": [
+          "完成标准",
+          "Completion checkpoint"
+        ],
+        "text": [
+          "你应能解释每个文件的用途、看到两种语言、区分保存与导出，并能通过节点找回修改。一次做完后，才开始编辑自己的正式菜单。",
+          "You should be able to explain each file, preview both languages, distinguish saving from exporting and recover an edit through history. Finish this exercise before editing production menus."
+        ]
+      },
+      {
+        "kind": "p",
+        "text": [
+          "示例文件按步骤拆分，两个 hello.yml 有相同目标路径。请分别导入对应目录，不要一次把整个教程 ZIP 里的所有 YAML 混合导入。",
+          "The samples are separated by step, and both hello.yml files target the same path. Import the corresponding folders separately rather than mixing every YAML from the whole tutorial ZIP in one import."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "troubleshooting",
+    "section": [
+      "17 / 常见问题",
+      "17 / TROUBLESHOOTING"
+    ],
+    "title": [
+      "界面、导入与回退问题",
+      "Editor, import and restore troubleshooting"
+    ],
+    "blocks": [
+      {
+        "kind": "table",
+        "headers": [
+          [
+            "现象",
+            "按顺序检查"
+          ],
+          [
+            "Symptom",
+            "Check in this order"
+          ]
+        ],
+        "rows": [
+          [
+            [
+              "画布空白",
+              "选中的是菜单而非语言文件？YAML 是否报错？组件是否被条件隐藏？点击“适合”并重置工作区布局。"
+            ],
+            [
+              "Blank canvas",
+              "Did you open a menu rather than a language file? Check YAML errors and visibility conditions, click Fit and reset the workspace layout."
+            ]
+          ],
+          [
+            [
+              "文字或图片不清晰",
+              "确认缩放比例、源图尺寸及像素边缘。Preview 不是游戏字体与着色器的最终渲染。"
+            ],
+            [
+              "Blurry text or images",
+              "Inspect zoom, source dimensions and pixel edges. Preview is not the final game-font/shader renderer."
+            ]
+          ],
+          [
+            [
+              "导入后旧值没改变",
+              "默认合并可能保留当前值。展开冲突，选择使用导入值，再应用。"
+            ],
+            [
+              "Old values remain after import",
+              "Merge may default to keeping current values. Expand conflicts, choose incoming values and apply."
+            ]
+          ],
+          [
+            [
+              "导入后图片缺失",
+              "导入只读取 YAML。检查 assets 目录、图片 ID 与注册文件，补齐 PNG。"
+            ],
+            [
+              "Images missing after import",
+              "Import reads YAML only. Check assets, image IDs and definitions, then supply missing PNGs."
+            ]
+          ],
+          [
+            [
+              "无法保存：文件被外部修改",
+              "先导出当前编辑内容到工程外，重新读取磁盘，再合并需要的修改。不要直接覆盖别人的改动。"
+            ],
+            [
+              "Save blocked by external edits",
+              "Export current edits outside the project first. Reread disk files and merge the needed changes rather than overwriting another edit."
+            ]
+          ],
+          [
+            [
+              "历史里没有旧版本",
+              "本次操作在重开工程后重置；保存节点只记录启用该功能后的受管理保存。"
+            ],
+            [
+              "An old state is absent",
+              "Session history resets on reopen. Saved points cover managed saves made after the feature became available."
+            ]
+          ],
+          [
+            [
+              "回退后磁盘没变",
+              "回退先改变编辑器；确认后还要保存。"
+            ],
+            [
+              "Disk unchanged after restore",
+              "Restore updates the editor first. Save after confirming it."
+            ]
+          ],
+          [
+            [
+              "ZIP 没有删除旧文件",
+              "导出没有删除清单。接收方需要根据变更范围处理删除。"
+            ],
+            [
+              "ZIP did not remove old files",
+              "Exports do not include a deletion manifest. The recipient must handle removals explicitly."
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "callout",
+        "title": [
+          "出现不确定的差异时",
+          "When the diff is unclear"
+        ],
+        "text": [
+          "先导出当前版本作为副本，再逐文件比较。保留原工程与保存节点，不要反复尝试覆盖来消除提示。",
+          "Export the current version as a copy, then compare files individually. Keep the original project and restore points instead of repeatedly overwriting files to dismiss a warning."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ai-troubleshooting",
+    "section": [
+      "17 / 常见问题",
+      "17 / TROUBLESHOOTING"
+    ],
+    "title": [
+      "Agent、更新和服务器连接问题",
+      "Agent, updates and server connection issues"
+    ],
+    "blocks": [
+      {
+        "kind": "table",
+        "headers": [
+          [
+            "现象",
+            "处理方法"
+          ],
+          [
+            "Symptom",
+            "What to do"
+          ]
+        ],
+        "rows": [
+          [
+            [
+              "401 / 403",
+              "核对 API Key、服务地址与账号权限；确认不是把网页访问令牌当作 API Key。"
+            ],
+            [
+              "401 / 403",
+              "Verify the API key, service endpoint and account permissions. A website session token is not necessarily an API key."
+            ]
+          ],
+          [
+            [
+              "404 或接口不支持",
+              "核对 Base URL 与协议。Chat、Responses、Messages 对应不同端点。"
+            ],
+            [
+              "404 or unsupported endpoint",
+              "Check Base URL and protocol. Chat, Responses and Messages use different endpoints."
+            ]
+          ],
+          [
+            [
+              "模型列表读取失败",
+              "手动填写服务商确认存在的模型 ID；列表接口可能未实现。"
+            ],
+            [
+              "Model listing fails",
+              "Manually enter a provider-confirmed model ID. The service may not implement listing."
+            ]
+          ],
+          [
+            [
+              "输出不流式或没有工具操作",
+              "确认服务支持流式与工具调用；普通聊天兼容并不保证完整 Agent 能力。"
+            ],
+            [
+              "No streaming or tool activity",
+              "Verify streaming and tool-call support. Basic chat compatibility does not guarantee full Agent capability."
+            ]
+          ],
+          [
+            [
+              "没有思考内容",
+              "接口可能没有返回此类内容；看答案和工具结果，不要据此断定失败。"
+            ],
+            [
+              "No thinking content",
+              "The API may not return it. Inspect answers and tool results instead of treating its absence as failure."
+            ]
+          ],
+          [
+            [
+              "上下文超限 / 压缩失败",
+              "核对真实上限，减少附件，重试压缩，或另开会话。"
+            ],
+            [
+              "Context overflow / compression failure",
+              "Check the true capacity, reduce attachments, retry compression or start another conversation."
+            ]
+          ],
+          [
+            [
+              "方案应用提示文件过期",
+              "方案之后文件发生了变化。审阅本地改动，再重新生成方案。"
+            ],
+            [
+              "Proposal is stale",
+              "The file changed after generation. Review local edits and regenerate the proposal."
+            ]
+          ],
+          [
+            [
+              "没有自动更新入口",
+              "使用安装版；开发环境与便携版不支持直接安装更新。检查网络是否能访问 GitHub。"
+            ],
+            [
+              "Update installation unavailable",
+              "Use the installed build. Development and portable builds do not install updates directly. Check GitHub connectivity."
+            ]
+          ],
+          [
+            [
+              "RCON 无法连接",
+              "核对服务器是否启用、主机、端口、密码与网络访问。菜单预览不依赖 RCON。"
+            ],
+            [
+              "RCON connection fails",
+              "Check server enablement, host, port, password and network access. Menu preview itself does not need RCON."
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "p",
+        "text": [
+          "服务限额或模型参数报错时，以服务商返回的错误和当前模型文档为准。不要把真实密钥粘贴到公开问题或截图中；问题反馈附版本、操作步骤、去除凭据的错误消息与最小配置即可。",
+          "For quota or parameter errors, use the provider's error message and current model documentation. Do not paste real keys into public issues or screenshots. Include the version, reproduction steps, credential-free error message and a minimal configuration."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "shortcuts",
+    "section": [
+      "18 / 速查",
+      "18 / QUICK REFERENCE"
+    ],
+    "title": [
+      "常用快捷键与后续帮助",
+      "Keyboard shortcuts and further help"
+    ],
+    "blocks": [
+      {
+        "kind": "table",
+        "headers": [
+          [
+            "快捷键",
+            "操作"
+          ],
+          [
+            "Shortcut",
+            "Action"
+          ]
+        ],
+        "rows": [
+          [
+            [
+              "Ctrl+O",
+              "打开工程"
+            ],
+            [
+              "Ctrl+O",
+              "Open a project"
+            ]
+          ],
+          [
+            [
+              "Ctrl+S",
+              "保存所有配置修改"
+            ],
+            [
+              "Ctrl+S",
+              "Save all configuration edits"
+            ]
+          ],
+          [
+            [
+              "Ctrl+Shift+I",
+              "导入与合并"
+            ],
+            [
+              "Ctrl+Shift+I",
+              "Import and merge"
+            ]
+          ],
+          [
+            [
+              "Ctrl+Shift+E",
+              "快捷导出"
+            ],
+            [
+              "Ctrl+Shift+E",
+              "Quick export"
+            ]
+          ],
+          [
+            [
+              "Ctrl+Alt+H",
+              "操作与回退"
+            ],
+            [
+              "Ctrl+Alt+H",
+              "Operations and restore"
+            ]
+          ],
+          [
+            [
+              "Ctrl+J",
+              "打开或聚焦 Agent 侧栏"
+            ],
+            [
+              "Ctrl+J",
+              "Open or focus the Agent sidebar"
+            ]
+          ],
+          [
+            [
+              "Ctrl+P",
+              "命令面板"
+            ],
+            [
+              "Ctrl+P",
+              "Command palette"
+            ]
+          ],
+          [
+            [
+              "Ctrl+Z / Ctrl+Shift+Z",
+              "撤销 / 重做"
+            ],
+            [
+              "Ctrl+Z / Ctrl+Shift+Z",
+              "Undo / redo"
+            ]
+          ],
+          [
+            [
+              "Ctrl+D / Delete",
+              "复制 / 删除选中组件（输入框外）"
+            ],
+            [
+              "Ctrl+D / Delete",
+              "Duplicate / delete selection outside text inputs"
+            ]
+          ],
+          [
+            [
+              "F",
+              "专注画布 / 还原（输入框外）"
+            ],
+            [
+              "F",
+              "Focus / restore canvas outside text inputs"
+            ]
+          ],
+          [
+            [
+              "F5 / Ctrl+R",
+              "重新读取工程磁盘文件，不是服务器重载"
+            ],
+            [
+              "F5 / Ctrl+R",
+              "Reread project files from disk, not server reload"
+            ]
+          ],
+          [
+            [
+              "Esc",
+              "关闭弹窗或命令面板"
+            ],
+            [
+              "Esc",
+              "Dismiss a dialog or command palette"
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "p",
+        "text": [
+          "鼠标：Ctrl+滚轮缩放；平移工具或中键拖动画布；双击资源卡片插入或替换图片；拖动图层调整顺序。输入框和源码编辑器可能优先处理自己的快捷键。",
+          "Mouse: Ctrl+wheel zooms; use the pan tool or middle-button drag to pan; double-click an asset to insert or replace an image; drag layers to reorder. Text inputs and the source editor may handle their own shortcuts first."
+        ]
+      },
+      {
+        "kind": "callout",
+        "title": [
+          "反馈问题时提供这些信息",
+          "Include this in a bug report"
+        ],
+        "text": [
+          "Studio 版本、系统、最短复现步骤、预期结果和实际结果、相关 YAML 与截图。涉及游戏效果时再补服务器与客户端版本。",
+          "Studio version, operating system, minimal steps, expected versus actual result, relevant YAML and screenshots. For in-game issues also include server and client versions."
+        ]
+      },
+      {
+        "kind": "p",
+        "text": [
+          "下载与更新：[GitHub Releases](https://github.com/Ti-Avanti/FutureUI-Studio/releases)\n项目与教程：[FutureUI Studio](https://github.com/Ti-Avanti/FutureUI-Studio)\n反馈问题：[GitHub Issues](https://github.com/Ti-Avanti/FutureUI-Studio/issues)",
+          "Downloads and updates: [GitHub Releases](https://github.com/Ti-Avanti/FutureUI-Studio/releases)\nProject and tutorials: [FutureUI Studio](https://github.com/Ti-Avanti/FutureUI-Studio)\nReport a problem: [GitHub Issues](https://github.com/Ti-Avanti/FutureUI-Studio/issues)"
+        ]
+      }
+    ]
+  }
+]

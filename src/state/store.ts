@@ -1,12 +1,14 @@
 import { create } from 'zustand';
 import { at, editYaml, moveYaml, readYaml } from '../model/documents';
-import type { Change, Config, Origin, Project, ProjectFile, Workspace } from '../model/types';
+import type { Change, Config, FileEdit, FileWrite, Origin, Project, Workspace } from '../model/types';
 import type { Proposal } from '../agent/types';
+import { applyFileEdits, selectionAfter, timelineFiles } from './history';
+import { configPathError } from '../model/paths';
 
 interface State {
-  project:Project|null; saved:Record<string,string>; active:string; tabs:string[];
+  project:Project|null; saved:Record<string,string>; savedHashes:Record<string,string|null>; active:string; tabs:string[];
   selected:Origin|null; workspace:Workspace; view:'canvas'|'code'|'split';
-  past:Change[]; future:Change[]; error:string; notice:string; busy:boolean;
+  past:Change[]; future:Change[]; historyTruncated:boolean; historyRevision:number; error:string; notice:string; busy:boolean;
   locale:string; zoom:number; grid:boolean; outlines:boolean; time:number; playing:boolean;
   variables:Config; hoveredState:'normal'|'hover'|'selected'|'disabled';
   bottom:'assets'|'problems'|'history'|'timeline'; previewOverrides:Record<string,string>|null;
@@ -17,28 +19,44 @@ interface State {
   duplicate:()=>void; remove:()=>void; add:(type:string)=>void;
   undo:()=>void; redo:()=>void; save:()=>Promise<void>;
   applyProposals:(proposals:Proposal[],projectId:string)=>void;
+  applyChanges:(edits:FileEdit[],label:string,projectId:string)=>void;
+  restoreOperation:(index:number)=>void;
 }
 export const useStudio=create<State>((set,get)=>({
-  project:null,saved:{},active:'',tabs:[],selected:null,workspace:'design',view:'canvas',
-  past:[],future:[],error:'',notice:'',busy:false,locale:'zh_cn',zoom:0,grid:true,outlines:false,
+  project:null,saved:{},savedHashes:{},active:'',tabs:[],selected:null,workspace:'design',view:'canvas',
+  past:[],future:[],historyTruncated:false,historyRevision:0,error:'',notice:'',busy:false,locale:'zh_cn',zoom:0,grid:true,outlines:false,
   time:0,playing:false,hoveredState:'normal',bottom:'assets',previewOverrides:null,
   variables:{'player.name':'像素商人',balance:1280,page:1,pages:1,category:'building','data.input.hints':true,'studio.preview':true},
   set,
   load:project=>{
     const active=project.files.find(f=>f.path==='menus/compact/shop.yml')?.path??project.files.find(f=>f.path.startsWith('menus/'))?.path??project.files[0]?.path??'';
-    set({project,saved:Object.fromEntries(project.files.map(f=>[f.path,f.text])),active,tabs:[active],past:[],future:[],selected:null,error:'',notice:'工程已载入',time:0,previewOverrides:null});
+    set({project,saved:Object.fromEntries(project.files.map(f=>[f.path,f.text])),savedHashes:Object.fromEntries(project.files.map(f=>[f.path,f.hash])),historyTruncated:false,historyRevision:0,active,tabs:[active],past:[],future:[],selected:null,error:'',notice:'工程已载入',time:0,previewOverrides:null});
   },
   openFile:active=>set(s=>({active,tabs:s.tabs.includes(active)?s.tabs:[...s.tabs,active],selected:null})),
+  applyChanges:(edits,label,projectId)=>{
+    const s=get();if(!s.project||s.project.id!==projectId)throw Error('工程已切换，请重新选择');
+    const unique=new Set<string>(),existing=new Map(s.project.files.map(f=>[f.path.toLowerCase(),f]));
+    for(const edit of edits){
+      const error=configPathError(edit.path);if(error)throw Error(error);
+      const key=edit.path.toLowerCase();if(unique.has(key))throw Error('同一次操作不能重复修改相同路径');unique.add(key);
+      const file=existing.get(key);if(file&&file.path!==edit.path)throw Error(`${edit.path} 与已有文件大小写冲突`);
+      if((file?.text??null)!==edit.before)throw Error(`${edit.path} 已被修改，请重新预览后再应用`);
+    }
+    const changes=edits.filter(e=>e.before!==e.after);if(!changes.length)return;
+    const time=Date.now(),last=s.past.at(-1),coalesce=label==='编辑 YAML'&&last?.label===label&&changes.length===1&&last.files.length===1&&last.files[0].path===changes[0].path&&time-last.time<1200&&!s.future.length;
+    const files=applyFileEdits(s.project.files,changes,'after',s.savedHashes);
+    const node:Change={id:coalesce?last!.id:crypto.randomUUID(),label,path:changes.length===1?changes[0].path:`${changes.length} 个文件`,time,files:coalesce?[{...changes[0],before:last!.files[0].before}]:changes};
+    const past=[...(coalesce?s.past.slice(0,-1):s.past),node];
+    set({project:{...s.project,files},...selectionAfter(files,s.active,s.tabs),selected:s.selected&&files.some(f=>f.path===s.selected!.file)?s.selected:null,past:past.slice(-200),future:[],historyTruncated:s.historyTruncated||past.length>200,error:''});
+  },
   createFile:(path,text)=>{
     const s=get();if(!s.project)return;
-    if(s.project.files.some(f=>f.path===path)){set({error:'文件已存在'});return;}
-    set({project:{...s.project,files:[...s.project.files,{path,text,hash:null}]},past:[...s.past,{path,before:null,after:text,label:'创建文件',time:Date.now()}],future:[]});
+    if(s.project.files.some(f=>f.path.toLowerCase()===path.toLowerCase())){set({error:'文件已存在'});return;}
+    try{s.applyChanges([{path,before:null,after:text}],'创建文件',s.project.id);}catch(e){set({error:(e as Error).message});}
   },
   replace:(path,text,label)=>{
     const s=get(),file=s.project?.files.find(f=>f.path===path);if(!file||file.text===text)return;
-    const change={label,path,before:file.text,after:text,time:Date.now()},last=s.past.at(-1);
-    const coalesce=label==='编辑 YAML'&&last?.label===label&&last.path===path&&change.time-last.time<1200;
-    set({project:{...s.project!,files:s.project!.files.map(f=>f.path===path?{...f,text}:f)},past:[...(coalesce?s.past.slice(0,-1):s.past),coalesce?{...change,before:last!.before}:change].slice(-200),future:[],error:''});
+    try{s.applyChanges([{path,before:file.text,after:text}],label,s.project!.id);}catch(e){set({error:(e as Error).message});}
   },
   field:(origin,property,value,remove)=>{
     const file=get().project?.files.find(f=>f.path===origin.file);if(!file)return;
@@ -75,29 +93,35 @@ export const useStudio=create<State>((set,get)=>({
     s.replace(file.path,editYaml(file.text,parent,[...components,node]),`添加 ${type}`);set({selected:{file:file.path,path:[...parent,components.length]}});
   },
   applyProposals:(proposals,projectId)=>{
-    const s=get();if(!s.project||s.project.id!==projectId)throw Error('工程已切换，请重新生成方案');
-    for(const p of proposals)if((s.project.files.find(f=>f.path===p.path)?.text??null)!==p.before)throw Error(`${p.path} 在生成期间发生了修改，请重新生成或手动合并`);
-    const files=new Map(s.project.files.map(f=>[f.path,f]));for(const p of proposals)files.set(p.path,{path:p.path,text:p.after,hash:files.get(p.path)?.hash??null});
-    set({project:{...s.project,files:[...files.values()]},past:[...s.past,{path:`${proposals.length} 个文件`,before:'',after:'',files:proposals,label:'应用 Agent 方案',time:Date.now()}].slice(-200),future:[],previewOverrides:null,notice:`已应用 ${proposals.length} 个文件，可撤销；尚未保存到磁盘`});
+    get().applyChanges(proposals,'应用 Agent 方案',projectId);
+    set({notice:`已应用 ${proposals.length} 个文件，可撤销；尚未保存到磁盘`});
   },
-  undo:()=>{
-    const s=get(),item=s.past.at(-1);if(!item||!s.project)return;const changes=item.files??[item];
-    if(changes.some(c=>c.before===null&&s.saved[c.path]!==undefined)){set({notice:'新文件已经保存；请通过文件管理器处理文件删除，以免误删工程文件'});return;}
-    const files=new Map(s.project.files.map(f=>[f.path,f]));for(const c of changes){if(c.before===null)files.delete(c.path);else{const file=files.get(c.path);if(file)files.set(c.path,{...file,text:c.before});}}
-    const active=files.has(s.active)?s.active:[...files.keys()].find(p=>p.startsWith('menus/'))??[...files.keys()][0]??'';
-    set({project:{...s.project,files:[...files.values()]},active,tabs:s.tabs.filter(p=>files.has(p)),past:s.past.slice(0,-1),future:[...s.future,item],selected:null,previewOverrides:null});
+  restoreOperation:index=>{
+    const s=get();if(!s.project||s.busy)return;
+    try{
+      const files=timelineFiles(s.project.files,s.past,s.future,index,s.savedHashes),all=[...s.past,...[...s.future].reverse()];
+      set({project:{...s.project,files},...selectionAfter(files,s.active,s.tabs),past:all.slice(0,index),future:all.slice(index).reverse(),notice:'已回到所选操作节点；可继续前进或保存',error:''});
+    }catch(e){set({error:(e as Error).message});}
   },
-  redo:()=>{
-    const s=get(),item=s.future.at(-1);if(!item||!s.project)return;const files=new Map(s.project.files.map(f=>[f.path,f]));
-    for(const c of item.files??[item])files.set(c.path,{path:c.path,text:c.after,hash:files.get(c.path)?.hash??null});
-    set({project:{...s.project,files:[...files.values()]},past:[...s.past,item],future:s.future.slice(0,-1),selected:null,previewOverrides:null});
-  },
+  undo:()=>{const s=get();if(s.past.length)s.restoreOperation(s.past.length-1);},
+  redo:()=>{const s=get();if(s.future.length)s.restoreOperation(s.past.length+1);},
   save:async()=>{
-    const s=get();if(!s.project||s.busy)return;const files=s.project.files.filter(f=>s.saved[f.path]!==f.text);if(!files.length){set({notice:'所有修改已保存'});return;}
+    const s=get();if(!s.project||s.busy)return;const files=dirtyFiles(s);if(!files.length){set({notice:'所有修改已保存'});return;}
     set({busy:true,error:''});try{
       const result=await window.studio.save(s.project.id,files),hashes=new Map(result.files.map(f=>[f.path,f.hash]));
-      set(current=>current.project?.id!==s.project?.id?{}:{project:{...current.project!,files:current.project!.files.map(f=>hashes.has(f.path)?{...f,hash:hashes.get(f.path)!}:f)},saved:{...current.saved,...Object.fromEntries(files.map(f=>[f.path,f.text]))},notice:`已保存 ${files.length} 个文件 · 已创建恢复副本`});
+      set(current=>{
+        if(current.project?.id!==s.project?.id)return{};
+        const saved={...current.saved},savedHashes={...current.savedHashes};
+        for(const f of files){if(f.text===null){delete saved[f.path];delete savedHashes[f.path];}else{saved[f.path]=f.text;savedHashes[f.path]=hashes.get(f.path)??null;}}
+        return{project:{...current.project!,files:current.project!.files.map(f=>hashes.has(f.path)?{...f,hash:hashes.get(f.path)??null}:f)},saved,savedHashes,historyRevision:current.historyRevision+1,notice:`已保存 ${files.length} 个文件 · 已创建回退节点`};
+      });
     }catch(e){set({error:(e as Error).message});}finally{set({busy:false});}
   }
 }));
-export const dirtyFiles=(state:Pick<State,'project'|'saved'>):ProjectFile[]=>state.project?.files.filter(f=>state.saved[f.path]!==f.text)??[];
+export function dirtyFiles(state:Pick<State,'project'|'saved'|'savedHashes'>):FileWrite[]{
+  if(!state.project)return[];
+  const current=new Map(state.project.files.map(f=>[f.path,f]));
+  const changed:FileWrite[]=state.project.files.filter(f=>state.saved[f.path]!==f.text).map(f=>({...f,hash:state.savedHashes[f.path]??null}));
+  for(const path of Object.keys(state.saved))if(!current.has(path))changed.push({path,text:null,hash:state.savedHashes[path]??null});
+  return changed;
+}

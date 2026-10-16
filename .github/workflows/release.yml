@@ -29,6 +29,7 @@ jobs:
           $package = Get-Content package.json -Raw | ConvertFrom-Json
           $updates = Get-Content resources/updates.json -Raw | ConvertFrom-Json
           $notes = Get-Content resources/release-notes.json -Raw | ConvertFrom-Json
+          $manuals = Get-Content docs/manuals/manifest.json -Raw | ConvertFrom-Json
           if ($env:GITHUB_REF_TYPE -ne 'tag' -or $env:GITHUB_REF_NAME -ne "v$($package.version)") {
             throw '请选择与 package.json 版本一致的 v 标签发布。'
           }
@@ -36,6 +37,14 @@ jobs:
             throw '发布仓库与更新源不一致，请先修改 resources/updates.json。'
           }
           if ($notes.version -ne $package.version) { throw '请更新对应版本的发布说明。' }
+          if ($manuals.version -ne $package.version) { throw '请更新并重新生成对应版本的使用手册。' }
+          $expectedManuals = @('FutureUI-Studio-Guide-zh-CN.pdf', 'FutureUI-Studio-Guide-en.pdf', 'FutureUI-Studio-Tutorial-Examples.zip')
+          if (@(Compare-Object $expectedManuals @($manuals.files.name)).Count -ne 0) { throw '手册与示例文件清单不完整。' }
+          foreach ($manual in $manuals.files) {
+            $file = Join-Path 'docs/manuals' $manual.name
+            if (-not (Test-Path -LiteralPath $file -PathType Leaf)) { throw "手册文件缺失：$file" }
+            if ((Get-FileHash -LiteralPath $file -Algorithm SHA256).Hash.ToLowerInvariant() -ne $manual.sha256) { throw "手册校验失败：$file" }
+          }
       - run: npm ci
       - name: Build installer and portable app
         run: npm run dist:win
@@ -52,13 +61,23 @@ jobs:
             "release/FutureUI-Studio-Setup-$($package.version).exe",
             "release/FutureUI-Studio-Setup-$($package.version).exe.blockmap",
             "release/FutureUI-Studio-$($package.version)-Portable.exe",
-            'release/latest.yml'
+            'release/latest.yml',
+            'docs/manuals/FutureUI-Studio-Guide-zh-CN.pdf',
+            'docs/manuals/FutureUI-Studio-Guide-en.pdf',
+            'docs/manuals/FutureUI-Studio-Tutorial-Examples.zip'
           )
           foreach ($asset in $assets) {
             if (-not (Test-Path -LiteralPath $asset -PathType Leaf)) { throw "发布文件缺失：$asset" }
           }
           $notesPath = Join-Path $env:RUNNER_TEMP 'futureui-studio-release.txt'
-          $body = @($notes.title, '') + @($notes.changes | ForEach-Object { "- $_" }) + @('', '首次使用请安装 Setup 版本。便携版不支持应用内安装更新。')
+          $releaseUrl = "https://github.com/${env:GITHUB_REPOSITORY}/releases/download/$tag"
+          $body = @($notes.title, '') + @($notes.changes | ForEach-Object { "- $_" }) + @(
+            '', '首次使用请安装 Setup 版本。便携版不支持应用内安装更新。',
+            '', '使用手册 / User guides（各 32 页）：', '',
+            "- [中文 PDF]($releaseUrl/FutureUI-Studio-Guide-zh-CN.pdf)",
+            "- [English PDF]($releaseUrl/FutureUI-Studio-Guide-en.pdf)",
+            "- [教程示例 / Tutorial examples]($releaseUrl/FutureUI-Studio-Tutorial-Examples.zip)"
+          )
           [System.IO.File]::WriteAllText($notesPath, ($body -join "`n"), [System.Text.UTF8Encoding]::new($false))
           $draft = gh release view $tag --json isDraft --jq '.isDraft' 2>$null
           if ($LASTEXITCODE -eq 0) {

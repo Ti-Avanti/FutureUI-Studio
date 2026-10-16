@@ -6,5 +6,6 @@ import './styles/panels.css';
 import './styles/workspaces.css';
 import './styles/agent.css';
 import './styles/updates.css';
+import './styles/config-tools.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(<App/>);

@@ -1,0 +1,596 @@
+[
+  {
+    "id": "conflicts",
+    "section": [
+      "10 / 导入",
+      "10 / IMPORT"
+    ],
+    "title": [
+      "逐项解决冲突并核对差异",
+      "Resolve conflicts one value at a time"
+    ],
+    "blocks": [
+      {
+        "kind": "figure",
+        "file": "import-diff.png",
+        "height": 350,
+        "caption": [
+          "左侧为当前内容，右侧为应用后的结果；上方可分别选择每个冲突值。",
+          "The left side is current content; the right side is the proposed result. Resolve individual conflicts above the diff."
+        ]
+      },
+      {
+        "kind": "steps",
+        "items": [
+          [
+            "先选择“不同值如何处理”的默认规则。保留当前值适合保护已有配置；使用导入值适合更新补丁。",
+            "Set the default under 不同值如何处理 (How to handle different values). Keep current protects existing settings; use incoming applies updated patch values."
+          ],
+          [
+            "展开冲突列表。路径中的 [heading] 指组件 ID，不是普通的行号；确认你改的是正确组件。",
+            "Expand the conflict list. A segment such as [heading] refers to a component ID, not a line number. Confirm the intended component."
+          ],
+          [
+            "对需要例外处理的字段单独切换“保留当前 / 使用导入”。然后上下滚动差异区，查看修改和新增内容。",
+            "Override individual fields with 保留当前 / 使用导入 (Keep current / Use incoming). Scroll the diff to inspect changes and additions."
+          ],
+          [
+            "检查动作列表有没有意外重复、语言引用是否存在、目标路径是否正确。确认后应用，并在画布检查后保存。",
+            "Check for unintended duplicate actions, missing language references and incorrect targets. Apply, inspect the canvas and save."
+          ]
+        ]
+      },
+      {
+        "kind": "callout",
+        "title": [
+          "有冲突不等于导入失败",
+          "A conflict does not mean import failed"
+        ],
+        "text": [
+          "不同值可由你选择；重复 YAML 键、非法路径、相同目标碰撞等属于阻止问题。阅读错误对应的文件和位置，修复后重新选择导入文件。",
+          "Different values can be resolved by choice. Duplicate YAML keys, unsafe paths and duplicate targets are blocking issues. Read the indicated file and location, fix it and select the import again."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "export",
+    "section": [
+      "11 / 导出",
+      "11 / EXPORT"
+    ],
+    "title": [
+      "导出当前、指定或已修改的配置",
+      "Export current, selected or modified files"
+    ],
+    "blocks": [
+      {
+        "kind": "steps",
+        "items": [
+          [
+            "按 Ctrl+Shift+E，进入“快捷导出”。根据目的点击“当前文件”“全部配置”或“未保存的修改”。",
+            "Press Ctrl+Shift+E to open 快捷导出 (Quick export). Choose 当前文件 (Current file), 全部配置 (All configuration) or 未保存的修改 (Unsaved changes)."
+          ],
+          [
+            "逐项检查勾选的路径。一个 YAML 可以直接导出为 YAML；多个配置通常使用 ZIP，目录结构会保留。",
+            "Review the checked paths. One YAML can be exported directly as YAML; use ZIP for multiple configurations to preserve their directory structure."
+          ],
+          [
+            "要把图片等一起交付，选择 ZIP 并勾选包含资源。只交付局部配置时，不要无意把整个资源目录一起带出。",
+            "To deliver images and other assets, select ZIP and enable asset inclusion. For a small configuration patch, avoid unintentionally including the entire asset directory."
+          ],
+          [
+            "点击“导出所选配置”，选择工程目录之外的位置，例如桌面的交付目录。",
+            "Click 导出所选配置 (Export selected configuration) and choose a destination outside the project, such as a delivery folder on your desktop."
+          ],
+          [
+            "解压检查目录和 YAML 内容。导出不会自动上传服务器，也不会把编辑器中的修改标记为已保存。",
+            "Extract and inspect the paths and YAML. Export neither uploads to a server nor marks editor changes as saved."
+          ]
+        ]
+      },
+      {
+        "kind": "figure",
+        "file": "export.png",
+        "height": 305,
+        "caption": [
+          "按文件选择导出范围，适合合并配置、交付页面或分享示例。",
+          "Choose the exact export scope for configuration patches, page delivery or examples."
+        ]
+      },
+      {
+        "kind": "callout",
+        "title": [
+          "导出的是当前编辑内容",
+          "Export uses the current editor contents"
+        ],
+        "text": [
+          "未保存的修改也会导出。被删除的文件不会作为删除指令包含在 ZIP 里，接收方需明确处理删除。编辑器密钥、会话和历史不随配置导出，但 YAML 里由你填写的密码等原始内容会保留。",
+          "Unsaved edits are included. Deleted files are not represented as deletion instructions in the ZIP; the recipient must handle removals explicitly. Editor keys, conversations and history are excluded, but passwords or other values you placed in YAML remain in that YAML."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "history",
+    "section": [
+      "12 / 回退",
+      "12 / RESTORE"
+    ],
+    "title": [
+      "回到本次操作的任意节点",
+      "Return to an operation in the current session"
+    ],
+    "blocks": [
+      {
+        "kind": "steps",
+        "items": [
+          [
+            "按 Ctrl+Alt+H，或点击顶部“操作节点与回退”。选择“本次操作”。",
+            "Press Ctrl+Alt+H or the top 操作节点与回退 (Operation nodes and restore) button. Select 本次操作 (Current session)."
+          ],
+          [
+            "左侧选择你想回到的节点。节点表示该操作完成后的工程状态；“本次打开工程”是起始状态。",
+            "Select the desired node on the left. It represents the project after that operation. 本次打开工程 is the starting state."
+          ],
+          [
+            "检查右侧新增、修改和删除的文件；切换差异文件，确认影响范围。",
+            "Inspect added, modified and deleted files on the right. Switch the diff file to check the full scope."
+          ],
+          [
+            "点击“回到此节点”，按 Esc 关闭回退窗口，再检查画布。此时磁盘尚未改变；确认后按 Ctrl+S 保存。",
+            "Click 回到此节点 (Return to this node), press Esc to close the dialog, then inspect the canvas. Disk files remain unchanged until you confirm and press Ctrl+S."
+          ],
+          [
+            "还没开始新编辑时，可以再选择后面的节点前进。回退后继续修改会形成新的操作分支，原来的后续操作不再保留。",
+            "Before making another edit, you may move forward to a later node. Editing after moving back creates a new branch and discards the former future operations."
+          ]
+        ]
+      },
+      {
+        "kind": "table",
+        "headers": [
+          [
+            "规则",
+            "你需要知道的事"
+          ],
+          [
+            "Rule",
+            "What it means"
+          ]
+        ],
+        "rows": [
+          [
+            [
+              "最多 200 个节点",
+              "最旧操作会逐步移出本次操作记录。"
+            ],
+            [
+              "Up to 200 nodes",
+              "The oldest operations eventually leave the session history."
+            ]
+          ],
+          [
+            [
+              "连续输入合并",
+              "约 1.2 秒内的连续输入可合并为同一节点。"
+            ],
+            [
+              "Typing is grouped",
+              "Continuous edits within about 1.2 seconds may share one node."
+            ]
+          ],
+          [
+            [
+              "批量导入作为整体",
+              "一次回退可撤销这批导入的多个文件。"
+            ],
+            [
+              "An import is grouped",
+              "One restore can undo several files from the same import."
+            ]
+          ],
+          [
+            [
+              "重新读取或打开工程",
+              "本次操作记录重置；长期恢复使用保存节点。"
+            ],
+            [
+              "Reread or reopen",
+              "Session operations reset. Use saved points for persistence."
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "callout",
+        "title": [
+          "回退不等于已保存",
+          "Restoring does not mean saving"
+        ],
+        "text": [
+          "修改已经写入磁盘后，撤销仍要再保存才能改变磁盘。回退到新增文件之前再保存，会按差异删除该文件；先确认删除列表。",
+          "If an edit was already saved, undoing it still requires another save to change disk files. Restoring to before a file was created and then saving removes that file according to the diff; inspect the deletion list first."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "saved",
+    "section": [
+      "12 / 回退",
+      "12 / RESTORE"
+    ],
+    "title": [
+      "关闭软件后仍能用的保存节点",
+      "Use restore points after reopening Studio"
+    ],
+    "blocks": [
+      {
+        "kind": "figure",
+        "file": "history.png",
+        "height": 340,
+        "caption": [
+          "保存节点可查看跨文件差异，再恢复到编辑器。",
+          "Saved points show cross-file differences before restoring into the editor."
+        ]
+      },
+      {
+        "kind": "steps",
+        "items": [
+          [
+            "完成一次配置保存后，打开“操作与回退 > 保存节点”。首次受管理的保存会记录保存前状态和保存后状态。",
+            "After saving configuration, open 操作与回退 > 保存节点 (Operations and restore > Saved points). The first managed save records the before and after states."
+          ],
+          [
+            "选择目标时间，检查差异文件及新增、删除数量。点击“回到此节点”。",
+            "Select the target time and review the diff plus addition/deletion counts. Click 回到此节点 (Return to this node)."
+          ],
+          [
+            "按 Esc 返回工作区，确认恢复结果后保存。恢复本身也会成为可撤销操作，方便处理误选。",
+            "Press Esc to return to the workspace, verify the restored result and save. The restore itself becomes an undoable operation, helping recover from a mistaken choice."
+          ],
+          [
+            "搬迁工程时，保留完整工程目录及隐藏的 .futureui-studio；仅导出配置不会携带历史。",
+            "When moving a project, keep the entire directory including the hidden .futureui-studio folder. Configuration exports do not carry history."
+          ]
+        ]
+      },
+      {
+        "kind": "callout",
+        "title": [
+          "保存节点的范围",
+          "Scope of saved points"
+        ],
+        "text": [
+          "节点位于 .futureui-studio/snapshots，保留最近 30 个、压缩后合计最多 256 MB。只覆盖 YAML，不还原 PNG、API 设置、聊天记录或服务器玩家数据。旧版普通备份不会自动成为节点列表。",
+          "Points are stored in .futureui-studio/snapshots, retaining up to 30 recent points and 256 MB compressed total. They cover YAML only, not PNGs, API settings, chats or server player data. Older ordinary backups do not automatically appear as restore points."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ai-connect",
+    "section": [
+      "13 / AGENT",
+      "13 / AGENT"
+    ],
+    "title": [
+      "连接自己的模型服务",
+      "Connect your own model service"
+    ],
+    "blocks": [
+      {
+        "kind": "steps",
+        "items": [
+          [
+            "按 Ctrl+J 打开 Agent，点击齿轮“Agent 模型设置”。先向你的服务商确认接口地址、协议、模型 ID 与上下文上限。",
+            "Press Ctrl+J to open Agent, then click the Agent 模型设置 (Agent model settings) gear. Confirm the endpoint, protocol, model ID and context limit with your provider."
+          ],
+          [
+            "填写 Base URL。OpenAI 兼容服务通常提供包含 /v1 的根地址；按服务商给出的完整地址填写，不要把网页聊天地址填进来。",
+            "Enter Base URL. OpenAI-compatible services often use an API root ending in /v1. Use your provider's endpoint, not a website's chat page."
+          ],
+          [
+            "接口协议选择 Chat Completions 或 Responses，必须与服务支持的协议一致。不要只改模型名字而忽略协议。",
+            "Choose Chat Completions or Responses to match the service. Changing only the model name does not change the wire protocol."
+          ],
+          [
+            "填写 API Key 与服务商实际提供的模型 ID。模型 ID 可以直接手填；点击“读取模型”会先保存设置，再尝试获取列表。",
+            "Enter the API key and the exact model ID from the provider. You may type a custom ID directly. 读取模型 (Read models) first saves settings, then tries to fetch the list."
+          ],
+          [
+            "按模型文档设置上下文上限、最大输出和工具轮数，点击“保存设置”，返回 Agent。",
+            "Set context capacity, output limit and tool rounds according to the model documentation. Click 保存设置 (Save settings), then return to Agent."
+          ],
+          [
+            "先发送小任务，例如“读取当前菜单并说明有哪些按钮，先不要修改”。确认流式输出和工具读取可用后再让它改配置。",
+            "Start with a small task: “Read the current menu and explain its buttons without modifying it.” Confirm streaming and tool reads before requesting edits."
+          ]
+        ]
+      },
+      {
+        "kind": "table",
+        "headers": [
+          [
+            "设置",
+            "填写建议"
+          ],
+          [
+            "Setting",
+            "Guidance"
+          ]
+        ],
+        "rows": [
+          [
+            [
+              "Base URL",
+              "只允许 http/https；不要包含账号密码、查询参数或 # 片段。"
+            ],
+            [
+              "Base URL",
+              "Use http/https without embedded credentials, query parameters or fragments."
+            ]
+          ],
+          [
+            [
+              "输出上限参数（Chat）",
+              "依据服务商选择 max_tokens 或 max_completion_tokens。"
+            ],
+            [
+              "Output parameter (Chat)",
+              "Choose max_tokens or max_completion_tokens according to the provider."
+            ]
+          ],
+          [
+            [
+              "模型能力",
+              "Agent 需要工具调用与流式能力；图片附件需要视觉模型。"
+            ],
+            [
+              "Model capabilities",
+              "Agent needs tool calls and streaming. Image attachments need a vision-capable model."
+            ]
+          ],
+          [
+            [
+              "读取模型失败",
+              "可能只是服务没有模型列表接口，仍可手填正确 ID。"
+            ],
+            [
+              "Model-list failure",
+              "The service may lack a listing endpoint; a valid manually entered ID can still work."
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "callout",
+        "title": [
+          "密钥如何保存",
+          "How keys are stored"
+        ],
+        "text": [
+          "勾选后使用系统加密能力保存在本机。修改设置时密钥留空会保留旧密钥；要删除请用“清除密钥”。迁移到其他电脑后重新填写，不要依赖复制加密文件。",
+          "When enabled, keys are encrypted using the operating system and stored locally. Leaving the key field blank preserves an existing key; use 清除密钥 (Clear key) to delete it. Re-enter it on another PC rather than relying on copied encrypted files."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "anthropic",
+    "section": [
+      "13 / AGENT",
+      "13 / AGENT"
+    ],
+    "title": [
+      "使用 Anthropic Messages 协议",
+      "Use the Anthropic Messages protocol"
+    ],
+    "blocks": [
+      {
+        "kind": "steps",
+        "items": [
+          [
+            "在模型设置中将“接口协议”切换为 Anthropic · Messages，再填写该服务对应的 Base URL、API Key 和模型 ID。",
+            "In model settings, choose Anthropic · Messages. Enter the matching Base URL, API key and model ID for that service."
+          ],
+          [
+            "默认地址切换时可自动变为 https://api.anthropic.com/v1；如果使用其他兼容服务，按它的地址填写。",
+            "The standard endpoint may switch automatically to https://api.anthropic.com/v1. For another compatible service, use that service's endpoint."
+          ],
+          [
+            "思考方式先用“沿用模型默认行为”。只有模型支持时才选择 Adaptive 或指定 Extended 预算，并确认输出预算满足服务要求。",
+            "Start with 沿用模型默认行为 (Use model defaults). Select Adaptive or an Extended budget only if the model supports it, with an output budget that meets the service's requirements."
+          ],
+          [
+            "保存后发送一个小型读取任务。若服务提示未知参数，检查思考方式与模型支持情况，不要反复增加预算。",
+            "Save and try a small read task. If the service rejects an unknown parameter, check thinking-mode compatibility rather than repeatedly increasing the budget."
+          ]
+        ]
+      },
+      {
+        "kind": "figure",
+        "file": "anthropic.png",
+        "height": 280,
+        "caption": [
+          "实际模型连接面板；截图未填写密钥或特定模型。",
+          "Actual model connection panel, with no key or specific model entered."
+        ]
+      },
+      {
+        "kind": "callout",
+        "title": [
+          "为什么有时没有“思考”内容",
+          "Why a thinking stream may be absent"
+        ],
+        "text": [
+          "只显示接口实际返回的 reasoning_content、thinking_delta 或 Responses 思考摘要。某些模型只返回答案，这并不代表故障；编辑器不会编造内部思考。",
+          "Studio displays reasoning_content, thinking_delta or a Responses reasoning summary only when the API returns it. Some models return an answer only, which is not necessarily a fault. Studio does not invent private reasoning."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "skills",
+    "section": [
+      "13 / AGENT",
+      "13 / AGENT"
+    ],
+    "title": [
+      "导入、更新和启用 Skill",
+      "Import, update and enable Skills"
+    ],
+    "blocks": [
+      {
+        "kind": "steps",
+        "items": [
+          [
+            "打开 Agent 的“管理 Skill”。内置 futureui-ui 提供插件能力与配置规范；先保留它，再按需要添加自己的风格或业务说明。",
+            "Open 管理 Skill (Manage Skills) in Agent. The built-in futureui-ui supplies plugin capabilities and configuration rules. Keep it, then add your own style or business guidance."
+          ],
+          [
+            "选择“导入目录”或“ZIP / SKILL.md”。包应有唯一的 SKILL.md 入口；多个候选入口会导致无法确定要导入哪个。",
+            "Choose 导入目录 (Import directory) or ZIP / SKILL.md. The package should have one unambiguous SKILL.md entry point."
+          ],
+          [
+            "查看名称、来源和参考文件，启用本次要使用的 Skill。每个任务最多加载 8 个已启用的 Skill。",
+            "Review the name, source and reference files, then enable the Skills for the task. Up to eight enabled Skills are loaded per task."
+          ],
+          [
+            "更新时导入同名 Skill。软件保留启用状态并备份旧的自定义版本；新版本从下一次任务起使用。",
+            "To update, import a Skill with the same name. Studio retains its enabled state and backs up the previous custom version. New content is used from the next task."
+          ],
+          [
+            "点击“查看说明”检查内容。目录中的脚本可作为资料读取，不会因为导入 Skill 就自动运行。",
+            "Use 查看说明 (View instructions) to inspect it. Scripts in a package may be read as reference; importing a Skill does not execute them."
+          ]
+        ]
+      },
+      {
+        "kind": "code",
+        "text": [
+          "---\nname: my-menu-style\ndescription: 我的像素菜单规范\nversion: 1.0.0\n---\n使用 compact 主题；按钮统一高度。\n先检查现有配置，再提交可审阅的修改。\n引用 references/ 中的业务规则。",
+          "---\nname: my-menu-style\ndescription: My pixel menu guidelines\nversion: 1.0.0\n---\nUse the compact theme and consistent button heights.\nInspect existing configuration before proposing changes.\nRead the business rules in references/."
+        ],
+        "font": 9
+      },
+      {
+        "kind": "table",
+        "headers": [
+          [
+            "限制",
+            "说明"
+          ],
+          [
+            "Limit",
+            "Details"
+          ]
+        ],
+        "rows": [
+          [
+            [
+              "名称",
+              "使用字母、数字、短横线或下划线。"
+            ],
+            [
+              "Name",
+              "Use letters, digits, hyphens or underscores."
+            ]
+          ],
+          [
+            [
+              "大小",
+              "单文件最多 2 MB，整包最多 8 MB，最多 500 个条目。"
+            ],
+            [
+              "Size",
+              "Up to 2 MB per file, 8 MB per package and 500 entries."
+            ]
+          ],
+          [
+            [
+              "回退",
+              "当前界面没有 Skill 版本回退按钮；需要时重新导入保留的旧包。"
+            ],
+            [
+              "Rollback",
+              "There is no Skill-version rollback button. Reimport a retained older package when needed."
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "callout",
+        "title": [
+          "Skill 不是自动增加插件能力",
+          "Skills do not add plugin features"
+        ],
+        "text": [
+          "Skill 是给 Agent 的规则和参考资料，不会让插件支持尚未实现的字段。同步插件版本后，也应检查 Skill 的适用版本和真实配置契约。",
+          "A Skill provides rules and reference material to Agent. It cannot make the plugin support unimplemented fields. When the plugin changes, check the Skill's supported version and configuration contract."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "agent-workflow",
+    "section": [
+      "13 / AGENT",
+      "13 / AGENT"
+    ],
+    "title": [
+      "把资源、组件和需求交给 Agent",
+      "Give Agent precise context and review its work"
+    ],
+    "blocks": [
+      {
+        "kind": "steps",
+        "items": [
+          [
+            "打开目标菜单，选中要改的组件。用“让 Agent 调整此组件”或画布右键入口，把组件来源与路径加入上下文。",
+            "Open the target menu and select the component. Use 让 Agent 调整此组件 (Ask Agent to adjust this component) or its canvas context menu to attach the component's source and path."
+          ],
+          [
+            "文件可右键发送或拖入 Agent；资源卡片可用发送图标或拖入。需要视觉反馈时添加画布截图。一次最多 8 个附件。",
+            "Send files through their context menu or drag them into Agent. Use the send icon or drag on asset cards. Attach a canvas capture for visual feedback. Each task accepts up to eight attachments."
+          ],
+          [
+            "写清目标、范围和约束，再发送。例如只调整当前页的间距和按钮，不改商品价格与动作。",
+            "Specify the goal, scope and constraints. For example, request spacing and button adjustments on the current page without changing product prices or actions."
+          ],
+          [
+            "观察流式回答和工具操作。可以打开浮窗扩大工作区，也可以停止任务；不要在同一任务里连续催促造成重复要求。",
+            "Watch the streamed response and tool activity. Expand into a floating panel for more room, or stop the task when needed."
+          ],
+          [
+            "Agent 提出修改后，先查看文件列表、差异和预览。点击应用只会更新编辑器，仍需要检查并保存。",
+            "When Agent proposes changes, inspect the file list, diff and preview. Applying updates the editor; you still need to verify and save."
+          ],
+          [
+            "不满意就丢弃方案并说明原因。存在待审方案时，先应用或丢弃，再发起下一次生成。",
+            "Discard an unsatisfactory proposal and explain why. Apply or discard a pending proposal before starting another generation."
+          ]
+        ]
+      },
+      {
+        "kind": "callout",
+        "title": [
+          "可直接复制的提示词",
+          "A prompt you can copy"
+        ],
+        "text": [
+          "请只修改 menus/tutorial/hello.yml。保持 compact 主题和现有动作不变；把两个按钮做成相同尺寸，数字与状态使用 readout 背景。使用已注册资源，不添加未支持字段。先检查文件，完成后给出差异供我确认。",
+          "Only edit menus/tutorial/hello.yml. Keep the compact theme and existing actions. Give both buttons equal dimensions and use readout backgrounds for numbers and states. Reuse registered assets; do not invent fields. Inspect the file first and provide a reviewable diff."
+        ]
+      },
+      {
+        "kind": "p",
+        "text": [
+          "附件中的文字和启用图片会发送给你配置的模型服务；“仅引用”不发送图片像素。一次方案最多 24 个文件，单个方案文件最多 200 KB。方案生成后如果目标文件又被修改，应用会检查过期冲突，应重新生成或先处理本地改动。",
+          "Attached text and enabled images are sent to your configured model service. “Reference only” does not send image pixels. A proposal supports up to 24 files and 200 KB per proposed file. If a target changes after generation, application checks for stale content; regenerate or resolve the local edit first."
+        ]
+      }
+    ]
+  }
+]

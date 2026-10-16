@@ -1,0 +1,15 @@
+id: tutorial/hello
+components:
+  - id: welcome_panel
+    children:
+      - id: heading
+        text: '<!i><white>Updated welcome'
+      - id: hello_button
+        text: '<!i>Send greeting'
+      - id: close_button
+        type: button
+        text: '<!i>Close'
+        height: 27
+        skin: button
+        actions:
+          - type: close

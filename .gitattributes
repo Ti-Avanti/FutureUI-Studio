@@ -1,0 +1,9 @@
+*.pdf binary
+*.png binary
+*.ico binary
+*.zip binary
+README.md text eol=lf
+docs/manuals/*.py text eol=lf
+docs/manuals/*.json text eol=lf
+docs/manuals/content/*.json text eol=lf
+docs/manuals/examples/**/*.yml text eol=lf

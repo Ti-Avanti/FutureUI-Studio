@@ -1,0 +1,22 @@
+{
+  "version": "0.1.2",
+  "edition_date": "2026-10-16",
+  "pages_per_manual": 32,
+  "files": [
+    {
+      "name": "FutureUI-Studio-Guide-zh-CN.pdf",
+      "sha256": "cc4ddf15195254a901b0f173d06c85d4b5d0c9bd86e68622143f703ba084faac",
+      "bytes": 1515525
+    },
+    {
+      "name": "FutureUI-Studio-Guide-en.pdf",
+      "sha256": "b7d4579b78024cf8b293eed4d0deb6a368ffbc5ad8818b890d31fb7513bd2453",
+      "bytes": 1115411
+    },
+    {
+      "name": "FutureUI-Studio-Tutorial-Examples.zip",
+      "sha256": "b4ad32033348dabebdd1402f0ed608b1d6a8542b90df7c062504d624a08b0dee",
+      "bytes": 1265
+    }
+  ]
+}

@@ -13,6 +13,14 @@ contextBridge.exposeInMainWorld('studio', {
   reveal: id => invoke('project:reveal', id),
   openLink: url => invoke('link:open', url),
   server: (settings, operation, player, menu) => invoke('server:command', settings, operation, player, menu),
+  transfer: {
+    import: kind => invoke('project:import-config', kind),
+    export: (id, files, format, assets) => invoke('project:export-selection', id, files, format, assets),
+  },
+  history: {
+    list: id => invoke('project:history-list', id),
+    read: (id, node) => invoke('project:history-read', id, node),
+  },
   updates: {
     state: () => invoke('updates:state'),
     check: () => invoke('updates:check'),

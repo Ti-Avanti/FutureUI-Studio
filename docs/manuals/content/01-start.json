@@ -1,0 +1,747 @@
+[
+  {
+    "id": "start",
+    "section": [
+      "开始之前",
+      "BEFORE YOU START"
+    ],
+    "title": [
+      "先看懂完整流程",
+      "Understand the complete workflow"
+    ],
+    "blocks": [
+      {
+        "kind": "p",
+        "text": [
+          "本手册适用于 **FutureUI Studio 0.1.2 / Windows x64**。从未接触过 YAML 也可以按顺序完成。先在本地工程练习，再把确认过的配置交给服务器。",
+          "This guide covers **FutureUI Studio 0.1.2 for Windows x64**. You can follow it without previous YAML experience. Practice in a local project first, then deliver the reviewed configuration to your server."
+        ]
+      },
+      {
+        "kind": "flow",
+        "items": [
+          [
+            "创建工程",
+            "编辑菜单",
+            "预览与回退",
+            "导出配置",
+            "服务器验证"
+          ],
+          [
+            "Create project",
+            "Edit menus",
+            "Preview / restore",
+            "Export",
+            "Verify in game"
+          ]
+        ]
+      },
+      {
+        "kind": "table",
+        "headers": [
+          [
+            "需要准备",
+            "用来做什么"
+          ],
+          [
+            "Prepare",
+            "Why you need it"
+          ]
+        ],
+        "rows": [
+          [
+            [
+              "Windows x64 电脑",
+              "运行安装版或便携版；无需为了使用编辑器单独安装 Node.js。"
+            ],
+            [
+              "A Windows x64 PC",
+              "Runs the installer or portable build. You do not need to install Node.js just to use the editor."
+            ]
+          ],
+          [
+            [
+              "本地配置目录",
+              "保存菜单、模板、语言和资源。首次启动可自动创建示例工程。"
+            ],
+            [
+              "A local configuration folder",
+              "Stores menus, templates, translations and assets. The first launch can create an example project."
+            ]
+          ],
+          [
+            [
+              "FutureUI 游戏服务器（发布时）",
+              "实际运行菜单、经济交易、PAPI 与第三方插件功能。"
+            ],
+            [
+              "A FutureUI game server (for deployment)",
+              "Runs menus, real purchases, PAPI placeholders and third-party integrations."
+            ]
+          ],
+          [
+            [
+              "模型服务（可选）",
+              "只有使用 Agent 时才需要 Base URL、API Key 和模型 ID。"
+            ],
+            [
+              "A model service (optional)",
+              "Base URL, API key and model ID are only needed for Agent features."
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "steps",
+        "items": [
+          [
+            "第一次使用：先阅读安装、工程和界面总览，再完成“第一个菜单”。",
+            "First time: read installation, projects and the workspace tour; then complete the first-menu exercise."
+          ],
+          [
+            "已经有配置：阅读批量导入、冲突处理与快捷导出。",
+            "Already have configurations? Start with batch import, conflict handling and quick export."
+          ],
+          [
+            "想让 AI 帮忙：完成模型连接与 Skill 设置，再练习待审方案流程。",
+            "Want AI assistance? Configure a model and Skills, then learn the proposal-review workflow."
+          ],
+          [
+            "修改失误：打开“操作与回退”；先看差异，再选择恢复节点。",
+            "Made a mistake? Open 操作与回退 (Operations and restore), inspect the diff, then select a restore point."
+          ]
+        ]
+      },
+      {
+        "kind": "callout",
+        "title": [
+          "先记住这件事",
+          "Remember this first"
+        ],
+        "text": [
+          "**编辑、保存、导出、服务器重载是不同操作。** 本地画布不是 Minecraft 客户端；画布能显示不等于服务器业务已验证。",
+          "**Editing, saving, exporting and reloading a server are different operations.** The local canvas is not a Minecraft client. A correct preview does not prove that server-side business logic works."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "install",
+    "section": [
+      "01 / 安装",
+      "01 / INSTALLATION"
+    ],
+    "title": [
+      "安装与第一次启动",
+      "Install and launch Studio"
+    ],
+    "blocks": [
+      {
+        "kind": "steps",
+        "items": [
+          [
+            "打开本项目 GitHub Releases，选择与本手册对应的 **v0.1.2**。下载 `FutureUI-Studio-Setup-0.1.2.exe`。",
+            "Open this project's GitHub Releases and select **v0.1.2**. Download `FutureUI-Studio-Setup-0.1.2.exe`."
+          ],
+          [
+            "双击安装包，按安装向导选择目录并完成安装。通过桌面或开始菜单中的 FutureUI Studio 启动。",
+            "Run the installer, choose an installation directory and complete the wizard. Launch FutureUI Studio from the desktop or Start menu shortcut."
+          ],
+          [
+            "首次进入时等待示例工程载入。左侧应出现菜单文件，中间应出现画布，底部会显示保存状态。",
+            "Wait for the example project to load. You should see menu files on the left, a canvas in the center and a save status at the bottom."
+          ],
+          [
+            "如果暂时不需要 AI，可以直接开始编辑；不必填写 API Key。",
+            "You can edit without AI. An API key is not required to use the editor."
+          ],
+          [
+            "建议通过“文件 > 新建工作工程”创建练习副本，不要直接把服务器生产目录作为第一次练习的位置。",
+            "Use 文件 > 新建工作工程 (File > New working project) for practice. Avoid using your live server directory for your first exercise."
+          ]
+        ]
+      },
+      {
+        "kind": "table",
+        "headers": [
+          [
+            "下载文件",
+            "适合谁"
+          ],
+          [
+            "Download",
+            "Use it for"
+          ]
+        ],
+        "rows": [
+          [
+            [
+              "Setup 安装版",
+              "日常使用。支持发现新版提醒、手动下载、安装后自动启动。"
+            ],
+            [
+              "Setup installer",
+              "Daily use. Supports update notifications, manual downloads and relaunch after installation."
+            ]
+          ],
+          [
+            [
+              "Portable 便携版",
+              "临时使用或移动使用。要使用应用内安装更新，需先安装一次 Setup。"
+            ],
+            [
+              "Portable build",
+              "Temporary or portable use. Install Setup once to enable in-app installation of updates."
+            ]
+          ],
+          [
+            [
+              ".blockmap / latest.yml",
+              "更新服务使用；普通用户无需单独打开或运行。"
+            ],
+            [
+              ".blockmap / latest.yml",
+              "Used by the updater. Users do not open or run these files themselves."
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "callout",
+        "title": [
+          "安装成功的标志",
+          "Success checkpoint"
+        ],
+        "text": [
+          "窗口标题为 FutureUI Studio，左上角显示项目名。通过“帮助 > 关于 FutureUI Studio”可以查看编辑器版本。底部的“FutureUI 1.0.0”是配置能力基线，不是 Studio 应用版本。",
+          "The window is titled FutureUI Studio and shows a project name. Use 帮助 > 关于 FutureUI Studio (Help > About) to inspect the application version. The bottom label “FutureUI 1.0.0” describes the configuration capability baseline, not the Studio application version."
+        ]
+      },
+      {
+        "kind": "p",
+        "text": [
+          "发布页：[FutureUI Studio Releases](https://github.com/Ti-Avanti/FutureUI-Studio/releases)",
+          "Release page: [FutureUI Studio Releases](https://github.com/Ti-Avanti/FutureUI-Studio/releases)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "projects",
+    "section": [
+      "02 / 工程",
+      "02 / PROJECTS"
+    ],
+    "title": [
+      "新建、打开与文件目录",
+      "Create, open and organize a project"
+    ],
+    "blocks": [
+      {
+        "kind": "steps",
+        "items": [
+          [
+            "新建：点击“文件 > 新建工作工程”，选择一个父目录。软件会在其中创建 `FutureUI-工作工程` 并复制示例配置；如果同名目录已存在，换一个父目录。",
+            "Create: choose 文件 > 新建工作工程 (File > New working project), then choose a parent folder. Studio creates `FutureUI-工作工程` there and copies the examples. If that folder already exists, choose another parent."
+          ],
+          [
+            "打开：按 `Ctrl+O`，选择包含 `menus` 子目录的配置根目录。不要只选中某个 YAML 文件，也不要只选 `menus` 内部的子目录。",
+            "Open: press `Ctrl+O` and select the configuration root containing a `menus` directory. Do not select a single YAML file or a subfolder inside `menus`."
+          ],
+          [
+            "也可以打开具有 `src/main/resources/menus` 的插件源码目录，编辑器会识别配置资源目录。",
+            "You may also open a plugin source folder containing `src/main/resources/menus`; Studio recognizes the resource directory."
+          ],
+          [
+            "切换工程或重新读取磁盘前，先保存想保留的修改。遇到放弃修改提示时，确认自己选对了操作。",
+            "Save changes you want to keep before switching projects or rereading disk files. Read the discard-changes prompt before accepting it."
+          ]
+        ]
+      },
+      {
+        "kind": "table",
+        "headers": [
+          [
+            "目录 / 文件",
+            "内容"
+          ],
+          [
+            "Path",
+            "Contents"
+          ]
+        ],
+        "rows": [
+          [
+            [
+              "menus/",
+              "菜单页面。"
+            ],
+            [
+              "menus/",
+              "Menu pages."
+            ]
+          ],
+          [
+            [
+              "templates/",
+              "被多个菜单引用的共享组件。"
+            ],
+            [
+              "templates/",
+              "Shared components referenced by menus."
+            ]
+          ],
+          [
+            [
+              "languages/zh_cn/、languages/en_us/",
+              "对应语言的文案。"
+            ],
+            [
+              "languages/zh_cn/, languages/en_us/",
+              "Localized text."
+            ]
+          ],
+          [
+            [
+              "shops/、functions/、rules/、hud/",
+              "商品、可复用流程、规则和 HUD 配置。"
+            ],
+            [
+              "shops/, functions/, rules/, hud/",
+              "Products, reusable flows, rules and HUD configuration."
+            ]
+          ],
+          [
+            [
+              "assets/",
+              "图片注册、主题、图片文件与着色器等资源。"
+            ],
+            [
+              "assets/",
+              "Image definitions, themes, image files and shaders."
+            ]
+          ],
+          [
+            [
+              "config.yml",
+              "工程中的主配置。"
+            ],
+            [
+              "config.yml",
+              "The main configuration in the project."
+            ]
+          ],
+          [
+            [
+              ".futureui-studio/",
+              "本地保存副本和保存节点；不要当作服务器菜单文件。"
+            ],
+            [
+              ".futureui-studio/",
+              "Local backup revisions and saved restore points, not server menu files."
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "callout",
+        "title": [
+          "找不到文件？",
+          "Cannot find a file?"
+        ],
+        "text": [
+          "左侧默认只显示菜单。切换“模板”或“全部文件”，再用搜索框输入文件名或路径。文件路径与菜单 `id` 不是同一个概念。",
+          "The left panel initially filters menus. Switch to 模板 (Templates) or 全部文件 (All files), then search by filename or path. A file path and a menu's `id` are not the same thing."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "workspace",
+    "section": [
+      "03 / 界面",
+      "03 / WORKSPACE"
+    ],
+    "title": [
+      "认识编辑器的六个区域",
+      "Find your way around the workspace"
+    ],
+    "blocks": [
+      {
+        "kind": "figure",
+        "file": "workspace.png",
+        "height": 285,
+        "caption": [
+          "实际界面：教程工程。PDF 可以放大查看，截图中的菜单是本书的练习示例。",
+          "Actual workspace with the tutorial project. Zoom the PDF to inspect details; the menu shown is the exercise used in this guide."
+        ]
+      },
+      {
+        "kind": "table",
+        "headers": [
+          [
+            "区域",
+            "你可以做什么"
+          ],
+          [
+            "Area",
+            "What you do there"
+          ]
+        ],
+        "rows": [
+          [
+            [
+              "顶部工作区",
+              "在设计、交互、动效、数据与语言、资源、发布之间切换。"
+            ],
+            [
+              "Top workspace tabs",
+              "Switch between design, interaction, motion, data/languages, assets and publishing."
+            ]
+          ],
+          [
+            [
+              "左上“项目”",
+              "搜索和打开 YAML；一个工程可同时打开多个文件标签。"
+            ],
+            [
+              "项目 (Project), top left",
+              "Search and open YAML files; keep several file tabs open."
+            ]
+          ],
+          [
+            [
+              "左下“图层”",
+              "选中组件；拖动图层调整同文件内的顺序。"
+            ],
+            [
+              "图层 (Layers), bottom left",
+              "Select components and drag layers to reorder them within the same file."
+            ]
+          ],
+          [
+            [
+              "中间“工作区”",
+              "画布、YAML 源码或两者并排；预览悬停与交互。"
+            ],
+            [
+              "工作区 (Workspace), center",
+              "Use canvas, YAML or split view; inspect hover states and simulate interactions."
+            ]
+          ],
+          [
+            [
+              "右侧“属性”",
+              "修改选中组件的尺寸、间距、皮肤、文案等。"
+            ],
+            [
+              "属性 (Inspector), right",
+              "Edit size, spacing, skin, text and other properties of the selected component."
+            ]
+          ],
+          [
+            [
+              "底部“面板”",
+              "资源库、时间轴、问题、历史记录。"
+            ],
+            [
+              "面板 (Panel), bottom",
+              "Assets, timeline, issues and history."
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "callout",
+        "title": [
+          "布局被拖乱时",
+          "If panels become misplaced"
+        ],
+        "text": [
+          "打开“窗口 > 重置工作区布局”。需要更大画布时，在非输入状态按 `F`；再次按 `F` 还原。Agent 入口在顶部，也可按 `Ctrl+J`。",
+          "Choose 窗口 > 重置工作区布局 (Window > Reset workspace layout). Press `F` outside text fields to focus the canvas; press it again to restore. Open Agent from the top bar or with `Ctrl+J`."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "first-code",
+    "section": [
+      "04 / 第一个菜单",
+      "04 / YOUR FIRST MENU"
+    ],
+    "title": [
+      "准备一个可运行的菜单文件",
+      "Prepare a usable first menu"
+    ],
+    "blocks": [
+      {
+        "kind": "p",
+        "text": [
+          "下载[教程示例 ZIP](https://github.com/Ti-Avanti/FutureUI-Studio/releases/download/v0.1.2/FutureUI-Studio-Tutorial-Examples.zip) 并解压。本页文件位于 `01-first-menu/menus/tutorial/hello.yml`。也可以用 UTF-8 无 BOM 手动保存下面的完整内容。不要在文件外再包一层 `menus:`。",
+          "Download and extract the [tutorial examples ZIP](https://github.com/Ti-Avanti/FutureUI-Studio/releases/download/v0.1.2/FutureUI-Studio-Tutorial-Examples.zip). This file is `01-first-menu/menus/tutorial/hello.yml`. Alternatively, save the complete content below as UTF-8 without BOM. Do not wrap it in an extra `menus:` key."
+        ]
+      },
+      {
+        "kind": "codefile",
+        "file": "examples/01-first-menu/menus/tutorial/hello.yml",
+        "font": 8.5
+      },
+      {
+        "kind": "callout",
+        "title": [
+          "这个例子做什么",
+          "What this example does"
+        ],
+        "text": [
+          "显示标题、玩家名和一个消息按钮。它使用示例工程的 `compact` 主题，不进行交易。目录里的 `02-merge-update` 是之后的合并练习补丁，不要作为完整页面替换本文件。",
+          "It displays a heading, a player name and a message button using the example project's `compact` theme. It performs no transaction. `02-merge-update` is a merge patch for a later exercise; do not replace this complete page with that patch."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "first-import",
+    "section": [
+      "04 / 第一个菜单",
+      "04 / YOUR FIRST MENU"
+    ],
+    "title": [
+      "把第一个菜单导入工程",
+      "Import the first menu into your project"
+    ],
+    "blocks": [
+      {
+        "kind": "steps",
+        "items": [
+          [
+            "先打开一个工作工程。按 `Ctrl+Shift+I`，或点击顶部“配置导入与导出”图标。",
+            "Open a working project. Press `Ctrl+Shift+I`, or click the top-bar 配置导入与导出 (Configuration import/export) icon."
+          ],
+          [
+            "选择“导入与合并 > 选择目录”，定位到解压后的 `01-first-menu`。也可以选择单个 `hello.yml`。",
+            "Choose 导入与合并 > 选择目录 (Import and merge > Choose directory), then select the extracted `01-first-menu` folder. You can also choose `hello.yml` individually."
+          ],
+          [
+            "在文件列表里确认勾选。目标路径应是 `menus/tutorial/hello.yml`；如果路径没有被自动识别，手动改成这个值。",
+            "Ensure the file is checked. Its target should be `menus/tutorial/hello.yml`; correct the target field manually if it was not detected."
+          ],
+          [
+            "右侧应显示“当前不存在”和导入内容。点击“应用导入”；此时只修改了编辑器中的工程。",
+            "The diff should show 当前不存在 (Does not currently exist) and the incoming content. Click 应用导入 (Apply import). This changes the editor project, not the files on disk yet."
+          ],
+          [
+            "按 `Ctrl+S` 保存。在项目搜索框输入 `tutorial/hello`，点击该文件。",
+            "Press `Ctrl+S` to save. Search for `tutorial/hello` in the Project panel and open it."
+          ],
+          [
+            "检查中间显示 My first menu、Hello 和 Say hello。底部应显示“所有修改已保存”。",
+            "Confirm the canvas shows My first menu, Hello and Say hello. The status bar should read 所有修改已保存 (All changes saved)."
+          ]
+        ]
+      },
+      {
+        "kind": "figure",
+        "file": "import-empty.png",
+        "height": 145,
+        "caption": [
+          "导入入口。首次练习只选择 01-first-menu，其他示例留到后续章节。",
+          "Import entry point. For this exercise select only 01-first-menu; use the other samples in later chapters."
+        ]
+      },
+      {
+        "kind": "callout",
+        "title": [
+          "新增菜单的实用方式",
+          "Practical ways to add a menu"
+        ],
+        "text": [
+          "0.1.2 可通过配置导入或 Agent 方案创建新文件。“新建工作工程”创建的是整个工程，不是单个菜单。",
+          "In 0.1.2, create new files through configuration import or an Agent proposal. 新建工作工程 creates a whole project, not a single menu."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "visual-edit",
+    "section": [
+      "05 / 可视化编辑",
+      "05 / VISUAL EDITING"
+    ],
+    "title": [
+      "选中组件并修改按钮",
+      "Select a component and change a button"
+    ],
+    "blocks": [
+      {
+        "kind": "steps",
+        "items": [
+          [
+            "打开 `tutorial/hello`，在左下图层中点击 `hello_button`。也可以在选择工具下直接点击画布按钮。",
+            "Open `tutorial/hello`, then click `hello_button` in Layers. You can also click the canvas button while using the selection tool."
+          ],
+          [
+            "右侧属性顶部应显示 `hello_button`。如果仍显示“画布设置”，说明尚未选中具体组件。",
+            "The Inspector heading should show `hello_button`. If it still shows 画布设置 (Canvas settings), you have not selected a component."
+          ],
+          [
+            "在“文字内容”里输入新的按钮名称。点击输入框外使文字提交；尺寸等属性按字段操作提交。",
+            "Enter new text under 文字内容 (Text content). Click outside the text box to commit it; other properties commit through their respective controls."
+          ],
+          [
+            "把高度改成 `36`，皮肤保持 `button`。观察画布与 YAML 同步变化。",
+            "Change height to `36`, keeping the `button` skin. Observe the matching changes in the canvas and YAML."
+          ],
+          [
+            "试一次 `Ctrl+Z` 或顶部撤销按钮，再重做。确认后按 `Ctrl+S`。",
+            "Try `Ctrl+Z` or the top Undo button, then redo. Press `Ctrl+S` when satisfied."
+          ],
+          [
+            "需要多个相似按钮：在非文本输入状态按 `Ctrl+D` 复制选中组件；删除选中组件使用 `Delete`。",
+            "For similar buttons, press `Ctrl+D` outside a text input to duplicate the selection. Use `Delete` to remove the selected component."
+          ]
+        ]
+      },
+      {
+        "kind": "figure",
+        "file": "inspector.png",
+        "height": 240,
+        "caption": [
+          "组件属性入口；先确认选中对象，再修改尺寸和文字。",
+          "Component properties. Confirm the selected object before changing size or text."
+        ]
+      },
+      {
+        "kind": "callout",
+        "title": [
+          "操作小提示",
+          "Editing tip"
+        ],
+        "text": [
+          "拖动画布本身用于平移视图，不是任意移动控件位置。组件排布由 row、column、grid 等容器以及宽高、间距决定。",
+          "Dragging the canvas pans the view; it does not freely reposition controls. Containers such as row, column and grid, together with size and spacing, determine layout."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "layout",
+    "section": [
+      "05 / 可视化编辑",
+      "05 / VISUAL EDITING"
+    ],
+    "title": [
+      "布局、模板与像素尺寸",
+      "Work with layout, templates and pixel sizes"
+    ],
+    "blocks": [
+      {
+        "kind": "table",
+        "headers": [
+          [
+            "设置",
+            "含义与建议"
+          ],
+          [
+            "Setting",
+            "Meaning and useful starting point"
+          ]
+        ],
+        "rows": [
+          [
+            [
+              "row / column / grid",
+              "横排 / 纵排 / 网格。先决定容器，再放组件。"
+            ],
+            [
+              "row / column / grid",
+              "Horizontal, vertical and grid containers. Decide the structure before adding components."
+            ]
+          ],
+          [
+            [
+              "width / height",
+              "游戏 GUI 像素单位，不是显示器物理像素；放大预览不会改变配置宽高。"
+            ],
+            [
+              "width / height",
+              "Game GUI pixel units, not monitor pixels. Preview zoom does not change configuration dimensions."
+            ]
+          ],
+          [
+            [
+              "padding / gap",
+              "内边距 / 子项间距。可以从 9、18、27 开始建立统一节奏。"
+            ],
+            [
+              "padding / gap",
+              "Inside padding and spacing between children. Values such as 9, 18 and 27 make a consistent starting grid."
+            ]
+          ],
+          [
+            [
+              "align / vertical-align",
+              "水平 / 垂直对齐；文字本身另有 text-align。"
+            ],
+            [
+              "align / vertical-align",
+              "Horizontal and vertical alignment. Text alignment is separately controlled by text-align."
+            ]
+          ],
+          [
+            [
+              "skin",
+              "组件的外观，如 panel、button、selected、readout。可用项取决于工程主题。"
+            ],
+            [
+              "skin",
+              "Appearance such as panel, button, selected or readout. Available skins depend on the project's theme."
+            ]
+          ],
+          [
+            [
+              "template",
+              "共享组件来源。修改模板文件会影响引用它的页面。"
+            ],
+            [
+              "template",
+              "The shared component source. Editing the template affects pages that reference it."
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "steps",
+        "items": [
+          [
+            "先选中容器，再用工具栏“添加文字 / 添加图片 / 添加按钮”。新增组件会加入选中容器；未选容器时通常加入当前页面根组件列表。",
+            "Select a container, then use 添加文字 / 添加图片 / 添加按钮 (Add text/image/button). New components go into the selected container, or usually into the page's root component list if no container is selected."
+          ],
+          [
+            "要调整顺序，拖动同一个文件里的图层。跨文件移动不会直接执行；请复制配置并检查引用。",
+            "Drag layers within the same file to change order. Direct cross-file moves are blocked; copy the configuration and check references instead."
+          ],
+          [
+            "选择模板实例时，留意右侧“来源文件”。在源码里确认自己修改的是共享模板还是当前实例。",
+            "For a template instance, check 来源文件 (Source file). Confirm in YAML whether you are editing the shared template or the current instance."
+          ],
+          [
+            "使用底部缩放的“适合”查看整体，再用 100% 或更高缩放检查像素边缘和文字间距。",
+            "Use 适合 (Fit) to inspect the whole menu, then 100% or higher zoom to inspect pixel edges and text spacing."
+          ]
+        ]
+      },
+      {
+        "kind": "callout",
+        "title": [
+          "布局改动后的检查",
+          "After a layout change"
+        ],
+        "text": [
+          "检查长文字、按钮悬停和窄窗口状态。文本、字体和着色器最终效果以真实客户端为准；不要靠超大固定宽高掩盖溢出。",
+          "Check long text, hover states and smaller windows. The real client is authoritative for text, fonts and shaders; avoid masking overflow with oversized fixed dimensions."
+        ]
+      }
+    ]
+  }
+]

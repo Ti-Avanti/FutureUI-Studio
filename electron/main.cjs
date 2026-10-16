@@ -7,6 +7,7 @@ const server = require('./server.cjs');
 const { registerAI } = require('./ai/index.cjs');
 const agent = require('./ai/agent.cjs');
 const { registerUpdates } = require('./updates/service.cjs');
+const { registerConfigTools } = require('./config-tools.cjs');
 let window, updates, dirty = false, activeOperations = 0;
 const settingsPath = () => path.join(app.getPath('userData'), 'settings.json');
 const examplePath = () => path.join(app.getAppPath(), 'resources', 'example');
@@ -57,6 +58,7 @@ async function start() {
   register('server:command', server.command);
   register('link:open', value => { const url = new URL(String(value)); if (!['https:','http:'].includes(url.protocol)) throw Error('只允许打开 HTTP(S) 链接'); return shell.openExternal(url.href); });
   registerAI({ app, window, dialog, safeStorage, register });
+  registerConfigTools({ window, dialog, register });
   updates = registerUpdates({ app, window, register, canInstall: () => {
     if (dirty) return '请先保存工程中的修改，再安装更新';
     if (agent.isRunning()) return 'Agent 仍在执行任务，请等待完成或先停止任务';
