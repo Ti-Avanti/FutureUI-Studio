@@ -13,8 +13,8 @@
       {
         "kind": "p",
         "text": [
-          "本手册适用于 **FutureUI Studio 0.1.3 / Windows x64**。从未接触过 YAML 也可以按顺序完成。先在本地工程练习，再把确认过的配置交给服务器。",
-          "This guide covers **FutureUI Studio 0.1.3 for Windows x64**. You can follow it without previous YAML experience. Practice in a local project first, then deliver the reviewed configuration to your server."
+          "本手册适用于 **FutureUI Studio 0.1.4 / Windows x64**。从未接触过 YAML 也可以按顺序完成。先在本地工程练习，再把确认过的配置交给服务器。",
+          "This guide covers **FutureUI Studio 0.1.4 for Windows x64**. You can follow it without previous YAML experience. Practice in a local project first, then deliver the reviewed configuration to your server."
         ]
       },
       {
@@ -140,8 +140,8 @@
         "kind": "steps",
         "items": [
           [
-            "打开本项目 GitHub Releases，选择与本手册对应的 **v0.1.3**。下载 `FutureUI-Studio-Setup-0.1.3.exe`。",
-            "Open this project's GitHub Releases and select **v0.1.3**. Download `FutureUI-Studio-Setup-0.1.3.exe`."
+            "打开本项目 GitHub Releases，选择与本手册对应的 **v0.1.4**。下载 `FutureUI-Studio-Setup-0.1.4.exe`。",
+            "Open this project's GitHub Releases and select **v0.1.4**. Download `FutureUI-Studio-Setup-0.1.4.exe`."
           ],
           [
             "双击安装包，按安装向导选择目录并完成安装。通过桌面或开始菜单中的 FutureUI Studio 启动。",
@@ -482,8 +482,8 @@
       {
         "kind": "p",
         "text": [
-          "下载[教程示例 ZIP](https://github.com/Ti-Avanti/FutureUI-Studio/releases/download/v0.1.3/FutureUI-Studio-Tutorial-Examples.zip) 并解压。本页文件位于 `01-first-menu/menus/tutorial/hello.yml`。也可以用 UTF-8 无 BOM 手动保存下面的完整内容。不要在文件外再包一层 `menus:`。",
-          "Download and extract the [tutorial examples ZIP](https://github.com/Ti-Avanti/FutureUI-Studio/releases/download/v0.1.3/FutureUI-Studio-Tutorial-Examples.zip). This file is `01-first-menu/menus/tutorial/hello.yml`. Alternatively, save the complete content below as UTF-8 without BOM. Do not wrap it in an extra `menus:` key."
+          "下载[教程示例 ZIP](https://github.com/Ti-Avanti/FutureUI-Studio/releases/download/v0.1.4/FutureUI-Studio-Tutorial-Examples.zip) 并解压。本页文件位于 `01-first-menu/menus/tutorial/hello.yml`。也可以用 UTF-8 无 BOM 手动保存下面的完整内容。不要在文件外再包一层 `menus:`。",
+          "Download and extract the [tutorial examples ZIP](https://github.com/Ti-Avanti/FutureUI-Studio/releases/download/v0.1.4/FutureUI-Studio-Tutorial-Examples.zip). This file is `01-first-menu/menus/tutorial/hello.yml`. Alternatively, save the complete content below as UTF-8 without BOM. Do not wrap it in an extra `menus:` key."
         ]
       },
       {
@@ -560,8 +560,8 @@
           "Practical ways to add a menu"
         ],
         "text": [
-          "0.1.3 可通过配置导入或 Agent 方案创建新文件。“新建工作工程”创建的是整个工程，不是单个菜单。",
-          "In 0.1.3, create new files through configuration import or an Agent proposal. 新建工作工程 creates a whole project, not a single menu."
+          "0.1.4 可通过配置导入或 Agent 方案创建新文件。“新建工作工程”创建的是整个工程，不是单个菜单。",
+          "In 0.1.4, create new files through configuration import or an Agent proposal. 新建工作工程 creates a whole project, not a single menu."
         ]
       }
     ]
@@ -730,8 +730,8 @@
             "For a template instance, check 来源文件 (Source file). Confirm in YAML whether you are editing the shared template or the current instance."
           ],
           [
-            "使用“适合”查看整体，再用 200% 或更高缩放检查像素边缘和文字。0.1.3 会在缩小时保留完整中文字形，避免笔画被取整抹去；高倍缩放仍保持像素风格。",
-            "Use Fit for the overall layout, then 200% or higher to inspect pixels and text. Version 0.1.3 retains complete Chinese glyphs at smaller scales instead of rounding strokes away; larger zoom levels keep the pixel style."
+            "使用“适合”查看整体，再用 200% 或更高缩放检查像素边缘和文字。0.1.4 会在缩小时保留完整中文字形，避免笔画被取整抹去；高倍缩放仍保持像素风格。",
+            "Use Fit for the overall layout, then 200% or higher to inspect pixels and text. Version 0.1.4 retains complete Chinese glyphs at smaller scales instead of rounding strokes away; larger zoom levels keep the pixel style."
           ]
         ]
       },

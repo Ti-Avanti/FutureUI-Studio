@@ -10,16 +10,8 @@ const { registerAI } = require('./ai/index.cjs');
 const agent = require('./ai/agent.cjs');
 const { registerUpdates } = require('./updates/service.cjs');
 const { registerConfigTools } = require('./config-tools.cjs');
+const { createProjectBootstrap } = require('./project-bootstrap.cjs');
 let window, updates, dirty = false, activeOperations = 0;
-const settingsPath = () => path.join(app.getPath('userData'), 'settings.json');
-const examplePath = () => path.join(app.getAppPath(), 'resources', 'example');
-async function remember(value) { await fs.writeFile(settingsPath(), JSON.stringify({ lastProject: value.root }), 'utf8'); return value; }
-async function createExample(parent) {
-  const target = path.join(parent, 'FutureUI-工作工程');
-  if (await fs.stat(target).catch(() => null)) throw Error(tr("该目录已存在 FutureUI-工作工程，请选择其他位置"));
-  await fs.cp(examplePath(), target, { recursive: true, errorOnExist: true, force: false });
-  return remember(await project.loadProject(target));
-}
 function register(channel, handler) {
   ipcMain.handle(channel, async (event, ...args) => {
     if (event.sender !== window.webContents || event.senderFrame !== window.webContents.mainFrame) return { ok: false, error: tr("无效请求来源") };
@@ -34,6 +26,7 @@ function register(channel, handler) {
 async function start() {
   await fs.mkdir(app.getPath('userData'), { recursive: true });
   await interfaceLanguage.initialize(app);
+  const projects = createProjectBootstrap(app);
   const workArea = screen.getDisplayNearestPoint(screen.getCursorScreenPoint()).workArea;
   const width = Math.min(1560, workArea.width - 16), height = Math.min(1000, workArea.height - 16);
   window = new BrowserWindow({ width, height, minWidth: Math.min(1050, width), minHeight: Math.min(700, height),
@@ -47,17 +40,9 @@ async function start() {
   window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
   window.webContents.on('will-navigate', event => event.preventDefault());
   interfaceLanguage.registerLanguage(register, window);
-  register('project:bootstrap', async () => {
-    const explicit = process.argv.find(a => a.startsWith('--project='))?.slice(10);
-    if (explicit) return remember(await project.loadProject(explicit));
-    const saved = await fs.readFile(settingsPath(), 'utf8').then(JSON.parse).catch(() => ({}));
-    if (saved.lastProject) { try { return await project.loadProject(saved.lastProject); } catch {} }
-    const parent = path.join(app.getPath('userData'), 'Projects'); await fs.mkdir(parent, { recursive: true });
-    const existing = path.join(parent, 'FutureUI-工作工程');
-    return await fs.stat(existing).catch(() => null) ? remember(await project.loadProject(existing)) : createExample(parent);
-  });
-  register('project:open', async () => { const chosen = await dialog.showOpenDialog(window, { title: tr("打开 FutureUI 工程"), properties: ['openDirectory'] }); return chosen.canceled ? null : remember(await project.loadProject(chosen.filePaths[0])); });
-  register('project:create', async () => { const chosen = await dialog.showOpenDialog(window, { title: tr("选择新工程保存位置"), properties: ['openDirectory', 'createDirectory'] }); return chosen.canceled ? null : createExample(chosen.filePaths[0]); });
+  register('project:bootstrap', () => projects.restore(process.argv.find(a => a.startsWith('--project='))?.slice(10)));
+  register('project:open', async () => { const chosen = await dialog.showOpenDialog(window, { title: tr("打开 FutureUI 工程"), properties: ['openDirectory'] }); return chosen.canceled ? null : projects.remember(await project.loadProject(chosen.filePaths[0])); });
+  register('project:create', async () => { const chosen = await dialog.showOpenDialog(window, { title: tr("选择新工程保存位置"), properties: ['openDirectory', 'createDirectory'] }); return chosen.canceled ? null : projects.create(chosen.filePaths[0]); });
   register('project:refresh', id => project.loadProject(project.getRoot(id)));
   register('project:save', project.saveFiles);
   register('project:export', async (id, files) => { const chosen = await dialog.showSaveDialog(window, { title: tr("导出 FutureUI 配置包"), defaultPath: `${path.basename(project.getRoot(id))}.zip`, filters: [{ name: tr("配置包"), extensions: ['zip'] }] }); return chosen.canceled ? null : exportProject(id, files, chosen.filePath); });

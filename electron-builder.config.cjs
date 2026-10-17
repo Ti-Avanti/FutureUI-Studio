@@ -8,7 +8,9 @@ module.exports = {
   appId: 'gg.fotia.futureui.studio',
   productName: 'FutureUI Studio',
   directories: { output: 'release', buildResources: 'build' },
-  files: ['dist/**/*', 'electron/**/*', 'resources/**/*', 'package.json', '!**/__pycache__/**', '!**/*.pyc'],
+  files: ['dist/**/*', 'electron/**/*', 'resources/**/*', 'package.json', '!resources/example{,/**/*}', '!**/__pycache__/**', '!**/*.pyc'],
+  extraResources: [{ from: 'resources/example', to: 'example', filter: ['**/*'] }],
+  afterPack: require('./build/verify-example.cjs'),
   asar: true,
   win: {
     target: [{ target: 'nsis', arch: ['x64'] }, { target: 'portable', arch: ['x64'] }],

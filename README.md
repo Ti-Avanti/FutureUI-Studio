@@ -8,12 +8,12 @@ A desktop editor for Minecraft FutureUI menus, combining a canvas, YAML, action 
 
 ## 下载 / Downloads
 
-当前版本：**0.1.3 · Windows x64**。
+当前版本：**0.1.4 · Windows x64**。
 
 | 文件 / File | 下载 / Download |
 | --- | --- |
-| 安装版，支持应用内手动更新 / Installer with manual in-app updates | [Setup 0.1.3](https://github.com/Ti-Avanti/FutureUI-Studio/releases/download/v0.1.3/FutureUI-Studio-Setup-0.1.3.exe) |
-| 便携版 / Portable | [Portable 0.1.3](https://github.com/Ti-Avanti/FutureUI-Studio/releases/download/v0.1.3/FutureUI-Studio-0.1.3-Portable.exe) |
+| 安装版，支持应用内手动更新 / Installer with manual in-app updates | [Setup 0.1.4](https://github.com/Ti-Avanti/FutureUI-Studio/releases/download/v0.1.4/FutureUI-Studio-Setup-0.1.4.exe) |
+| 便携版 / Portable | [Portable 0.1.4](https://github.com/Ti-Avanti/FutureUI-Studio/releases/download/v0.1.4/FutureUI-Studio-0.1.4-Portable.exe) |
 | 全部版本与更新说明 / Versions and release notes | [Releases](https://github.com/Ti-Avanti/FutureUI-Studio/releases) |
 
 普通用户只需下载安装版或便携版，无需单独安装 Node.js。`.blockmap` 与 `latest.yml` 供更新程序使用。便携版需要先安装一次 Setup 才能使用应用内安装更新。
@@ -26,9 +26,9 @@ Users need only the installer or portable build; a separate Node.js installation
 
 Both **32-page** guides include actual screenshots, clickable contents, step-by-step exercises and troubleshooting. The English guide retains Chinese UI labels with explanations. The editor supports Chinese and English, follows the system by default, and remembers a manual choice from the top language icon. The status-bar language selector independently controls menu previews.
 
-- [中文 PDF · 下载](https://github.com/Ti-Avanti/FutureUI-Studio/releases/download/v0.1.3/FutureUI-Studio-Guide-zh-CN.pdf) · [仓库内预览](docs/manuals/FutureUI-Studio-Guide-zh-CN.pdf)
-- [English PDF · Download](https://github.com/Ti-Avanti/FutureUI-Studio/releases/download/v0.1.3/FutureUI-Studio-Guide-en.pdf) · [Repository preview](docs/manuals/FutureUI-Studio-Guide-en.pdf)
-- [教程示例 ZIP / Tutorial examples](https://github.com/Ti-Avanti/FutureUI-Studio/releases/download/v0.1.3/FutureUI-Studio-Tutorial-Examples.zip) · [Browse examples](docs/manuals/examples)
+- [中文 PDF · 下载](https://github.com/Ti-Avanti/FutureUI-Studio/releases/download/v0.1.4/FutureUI-Studio-Guide-zh-CN.pdf) · [仓库内预览](docs/manuals/FutureUI-Studio-Guide-zh-CN.pdf)
+- [English PDF · Download](https://github.com/Ti-Avanti/FutureUI-Studio/releases/download/v0.1.4/FutureUI-Studio-Guide-en.pdf) · [Repository preview](docs/manuals/FutureUI-Studio-Guide-en.pdf)
+- [教程示例 ZIP / Tutorial examples](https://github.com/Ti-Avanti/FutureUI-Studio/releases/download/v0.1.4/FutureUI-Studio-Tutorial-Examples.zip) · [Browse examples](docs/manuals/examples)
 
 手册覆盖安装、工程目录、画布与源码、布局与模板、交互、变量与语言、商品数据、资源、动画、导入合并、导出、操作节点与保存节点、模型连接、Skill、多会话与压缩、服务器发布和更新。
 

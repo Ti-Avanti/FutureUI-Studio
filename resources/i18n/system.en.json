@@ -193,5 +193,6 @@
   "工作区上下文：{0}\n\n用户需求：{1}": "Workspace context: {0}\n\nUser request: {1}",
   "\n已达到本次操作轮数上限，可以审阅已有方案后继续。": "\nThe task reached its tool-round limit. Review the current proposal before continuing.",
   "\n[大型工具结果省略，完整文件可重新读取]\n": "\n[Large tool result omitted; read the full file again if needed]\n",
-  "此前会话的压缩记忆（配置可能已变化，修改前仍需读取当前文件）：\n{0}": "Compressed conversation memory (configuration may have changed; reread current files before editing):\n{0}"
+  "此前会话的压缩记忆（配置可能已变化，修改前仍需读取当前文件）：\n{0}": "Compressed conversation memory (configuration may have changed; reread current files before editing):\n{0}",
+  "内置示例工程不完整，请重新安装最新版 FutureUI Studio。": "The bundled example project is incomplete. Please reinstall the latest FutureUI Studio."
 }

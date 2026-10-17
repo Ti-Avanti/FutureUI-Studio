@@ -1,19 +1,15 @@
 {
-  "version": "0.1.3",
-  "title": "中英文界面与清晰预览",
-  "titleEn": "Bilingual interface and clearer previews",
+  "version": "0.1.4",
+  "title": "修复安装版示例工程初始化",
+  "titleEn": "Fix installed example project initialization",
   "changes": [
-    "编辑器新增简体中文和英文界面，默认跟随系统语言，也可手动切换并记住选择。",
-    "语言切换即时生效，保留未保存编辑、会话与工作区；菜单预览语言独立设置。",
-    "补齐 Agent、导入导出、回退、更新及系统对话框的英文文本。",
-    "修复缩放时中文笔画被舍入丢失的问题，并对齐画布与屏幕像素。",
-    "同步更新中英文图文手册与教程示例。"
+    "修复安装或更新后新建工作工程出现 resources\\example ENOENT 的问题。",
+    "示例工程随安装包独立分发，并在打包时逐文件核对完整性。",
+    "工程复制完成后才启用目标目录；兼容旧版创建失败留下的空目录，保留已有工程。"
   ],
   "changesEn": [
-    "The editor now supports Simplified Chinese and English, follows the system by default, and remembers a manual choice.",
-    "Switch instantly without losing unsaved edits, sessions or workspace state. Menu preview language remains independent.",
-    "Localized Agent, import/export, restore, updates and native dialogs.",
-    "Fixed missing Chinese strokes at small zoom levels and aligned the canvas with device pixels.",
-    "Updated the illustrated Chinese and English guides and tutorial examples."
+    "Fixed resources\\example ENOENT when creating a working project after installation or update.",
+    "Bundled examples are distributed outside app.asar and verified file by file during packaging.",
+    "New projects become available only after copying finishes. Existing projects and folders left by older failed attempts are preserved."
   ]
 }
